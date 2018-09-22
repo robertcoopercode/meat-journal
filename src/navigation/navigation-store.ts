@@ -19,7 +19,7 @@ function findCurrentRoute(navState) {
 }
 
 /**
- * Tracks the navigation state for `react-navigation` as well as providers
+ * Tracks the navigation state for `react-navigation` as well as provides
  * the actions for changing that state.
  */
 export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
@@ -65,7 +65,7 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
      *
      * @param routeName The route name.
      */
-    navigateTo (routeName: string) {
+    navigateTo(routeName: string) {
       self.dispatch(NavigationActions.navigate({ routeName }))
     },
   }))

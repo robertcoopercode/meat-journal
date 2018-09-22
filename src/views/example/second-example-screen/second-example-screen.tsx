@@ -138,7 +138,7 @@ export class SecondExampleScreen extends React.Component<SecondExampleScreenProp
                 textStyle={DEMO_TEXT}
                 tx="secondExampleScreen.reactotron"
                 onPress={this.demoReactotron}
-                />
+              />
             </View>
             <Image source={logoIgnite} style={IGNITE} />
             <View style={LOVE_WRAPPER}>

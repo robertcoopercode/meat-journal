@@ -22,6 +22,9 @@
   "welcome": {
     "title": "Meat Journal",
     "description": "Keep track of the meat you eat",
-    "getStarted": "Get Started"
+    "cta": "Get Started"
+  },
+  "logbookList": {
+    "header": "HELLO"
   }
 }

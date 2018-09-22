@@ -14,5 +14,5 @@ export interface NavigationConfig {
  * to override this for testing.
  */
 export const DEFAULT_NAVIGATION_CONFIG: NavigationConfig = {
-  exitRoutes: ["firstExample"],
+  exitRoutes: ["welcome"],
 }

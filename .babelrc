@@ -1,14 +1,22 @@
 {
   "presets": ["react-native"],
   "env": {
-    "production": {
-    }
+    "production": {}
   },
   "plugins": [
     [
       "transform-inline-environment-variables",
       {
         "include": ["NODE_ENV", "API"]
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "src": "./src"
+        }
       }
     ]
   ]

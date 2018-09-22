@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start":  "env REACT_DEBUGGER=\"$([ -d '/Applications/React Native Debugger.app' ] && echo \"open 'rndebugger://set-debugger-loc?host=localhost&port=8081' --args\")\" node node_modules/react-native/local-cli/cli.js start",
+    "start": "env REACT_DEBUGGER=\"$([ -d '/Applications/React Native Debugger.app' ] && echo \"open 'rndebugger://set-debugger-loc?host=localhost&port=8081' --args\")\" node node_modules/react-native/local-cli/cli.js start",
     "run:ios": "react-native run-ios --simulator 'iPhone X'",
     "test": "jest",
     "compile": "tsc --noEmit -p . --pretty",
@@ -50,6 +50,7 @@
     "@types/react-test-renderer": "16.0.1",
     "@types/validate.js": "0.11.0",
     "babel-jest": "23.6.0",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-inline-environment-variables": "0.4.1",
     "babel-preset-react-native": "4.0.1",
     "ignite-ir-boilerplate-bowser": "^1.0.0-beta.2",
