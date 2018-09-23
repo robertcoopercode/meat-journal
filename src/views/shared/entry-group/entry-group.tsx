@@ -49,6 +49,9 @@ const LOG_ENTRY_TIME: ViewStyle = {
   alignItems: "center",
 }
 
+const cowImage = <Image source={require("src/assets/cow.png")} />
+const pigImage = <Image source={require("src/assets/pig.png")} />
+
 /**
  * Stateless functional component for your needs
  *
@@ -65,6 +68,23 @@ export function EntryGroup(props: EntryGroupProps) {
   const viewStyle = { ...viewPresetToUse, ...styleOverride }
   const textStyle = textPresetToUse
 
+  const renderAnimalImage = type => {
+    switch (type) {
+      case "cow":
+        return <Image source={require("src/assets/cow.png")} />
+      case "porc":
+        return <Image source={require("src/assets/pig.png")} />
+      case "duck":
+        return <Image source={require("src/assets/duck.png")} />
+      case "horse":
+        return <Image source={require("src/assets/horse.png")} />
+      case "lamb":
+        return <Image source={require("src/assets/sheep.png")} />
+      default:
+        return <Image source={require("src/assets/cow.png")} />
+    }
+  }
+
   return (
     <View>
       <Text style={LOG_ENTRY_DATE} preset="header">
@@ -74,9 +94,7 @@ export function EntryGroup(props: EntryGroupProps) {
       with relying on the index once the ability to delete entries is added */}
       {props.entries.map((entry, index) => (
         <TouchableOpacity style={[LOG_ENTRY, index > 0 && LOG_ENTRY_WITH_OFFSET]} key={index}>
-          <View style={LOG_ENTRY_IMAGE}>
-            <Image source={require("src/assets/cow.png")} />
-          </View>
+          <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.type)}</View>
           <View style={LOG_ENTRY_DETAILS}>
             <Text preset="fieldLabel">{entry.name}</Text>
             <Text style={LOG_ENTRY_DETAILS_WEIGHT}>{entry.weight}</Text>
