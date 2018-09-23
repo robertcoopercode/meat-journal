@@ -10,9 +10,9 @@ interface StatefulNavigatorProps {
 @inject("navigationStore")
 @observer
 export class StatefulNavigator extends React.Component<StatefulNavigatorProps, {}> {
-  componentDidMount() {
-    this.props.navigationStore.reset() // Comment this out if you want to retain the navigation state
-  }
+  // componentDidMount() {
+  //   this.props.navigationStore.reset() // Comment this out if you want to retain the navigation state
+  // }
   render() {
     // grab our state & dispatch from our navigation store
     const { state, dispatch, addListener } = this.props.navigationStore
