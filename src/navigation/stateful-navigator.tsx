@@ -1,7 +1,7 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { RootNavigator } from "./root-navigator"
-import { NavigationStore } from "../navigation/navigation-store"
+import { NavigationStore } from "./navigation-store"
 
 interface StatefulNavigatorProps {
   navigationStore?: NavigationStore
@@ -24,6 +24,10 @@ export class StatefulNavigator extends React.Component<StatefulNavigatorProps, {
       addListener,
     }
 
-    return <RootNavigator navigation={navigation} />
+    return (
+      <React.Fragment>
+        <RootNavigator navigation={navigation} />
+      </React.Fragment>
+    )
   }
 }

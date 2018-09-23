@@ -39,4 +39,4 @@ export const textPresets = {
 /**
  * A list of preset names.
  */
-export type JournalTestComponentPresetNames = keyof typeof viewPresets
+export type EntryGroupPresetNames = keyof typeof viewPresets

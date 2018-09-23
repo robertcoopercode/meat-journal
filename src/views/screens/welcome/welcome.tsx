@@ -11,7 +11,7 @@ import { color, spacing } from "src/theme"
 export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.tertiary,
+  backgroundColor: color.secondary,
 }
 
 const HEADER: TextStyle = {

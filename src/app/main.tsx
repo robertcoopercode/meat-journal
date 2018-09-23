@@ -2,9 +2,16 @@
 //
 // In this file, we'll be kicking off our app or storybook.
 
-import { AppRegistry } from "react-native"
+import { AppRegistry, YellowBox } from "react-native"
 import { RootComponent } from "./root-component"
 import { StorybookUIRoot } from "../../storybook"
+
+// Ignore a lame warning
+YellowBox.ignoreWarnings([
+  "Warning: isMounted(...) is deprecated",
+  "Module RCTImageLoader",
+  "Sending `onAnimatedValueUpdate` with no listeners registered.",
+])
 
 /**
  * This needs to match what's found in your app_delegate.m and MainActivity.java.

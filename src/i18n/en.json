@@ -24,7 +24,11 @@
     "description": "Keep track of the meat you eat",
     "cta": "Get Started"
   },
-  "logbookList": {
-    "header": "HELLO"
+  "logbookList": {},
+  "logbookCalendar": {
+    "header": "LOGBOOK CALENDAR"
+  },
+  "statistics": {
+    "header": "STATISTICS"
   }
 }

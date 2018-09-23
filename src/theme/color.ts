@@ -49,5 +49,7 @@ export const color = {
    */
   error: palette.angry,
 
-  tertiary: palette.stilDeGrainYellow,
+  secondary: palette.stilDeGrainYellow,
+  tertiary: palette.cheGuevaraRed,
+  border: palette.superSilver,
 }

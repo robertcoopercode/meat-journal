@@ -1,6 +1,6 @@
 require("../src/views/shared/text/text.story")
 require("../src/views/shared/button/button.story")
-require("../src/views/example/journal-test-component/journal-test-component.story")
+require("../src/views/shared/entry-group/entry-group.story")
 require("../src/views/shared/form-row/form-row.story")
 require("../src/views/shared/switch/switch.story")
 require("../src/views/shared/text-field/text-field.story")
