@@ -49,9 +49,6 @@ const LOG_ENTRY_TIME: ViewStyle = {
   alignItems: "center",
 }
 
-const cowImage = <Image source={require("src/assets/cow.png")} />
-const pigImage = <Image source={require("src/assets/pig.png")} />
-
 /**
  * Stateless functional component for your needs
  *
@@ -93,7 +90,11 @@ export function EntryGroup(props: EntryGroupProps) {
       {/* TODO: Use a unique ID instead of the index. There could be problems
       with relying on the index once the ability to delete entries is added */}
       {props.entries.map((entry, index) => (
-        <TouchableOpacity style={[LOG_ENTRY, index > 0 && LOG_ENTRY_WITH_OFFSET]} key={index}>
+        <TouchableOpacity
+          style={[LOG_ENTRY, index > 0 && LOG_ENTRY_WITH_OFFSET]}
+          key={index}
+          onPress={() => null}
+        >
           <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.type)}</View>
           <View style={LOG_ENTRY_DETAILS}>
             <Text preset="fieldLabel">{entry.name}</Text>

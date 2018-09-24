@@ -11,11 +11,23 @@ import { translate } from "../../../i18n"
  */
 export function Text(props: TextProps) {
   // grab the props
-  const { preset = "default", tx, text, children, style: styleOverride, ...rest } = props
+  const {
+    preset = "default",
+    tx,
+    text,
+    children,
+    style: styleOverride,
+    uppercase = false,
+    ...rest
+  } = props
 
   // figure out which content to use
   const i18nText = tx && translate(tx)
-  const content = i18nText || text || children
+  let content = i18nText || text || children
+
+  if (uppercase) {
+    content = content.toUpperCase()
+  }
 
   // assemble the style
   const presetToUse = presets[preset] || presets.default
