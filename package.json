@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "apisauce": "0.14.3",
+    "date-fns": "^1.29.0",
     "lodash.throttle": "4.1.1",
     "mobx": "4.2.1",
     "mobx-react": "5.1.2",
@@ -33,6 +34,7 @@
     "react-native": "0.55.4",
     "react-native-calendars": "^1.20.0",
     "react-native-i18n": "2.0.12",
+    "react-native-keyboard-aware-scroll-view": "^0.7.2",
     "react-native-keychain": "3.0.0-rc.3",
     "react-native-splash-screen": "3.0.6",
     "react-native-vector-icons": "^5.0.0",

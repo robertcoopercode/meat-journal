@@ -1,11 +1,12 @@
 import * as React from "react"
-import { observer } from "mobx-react"
+import { inject, observer } from "mobx-react"
+import { NavigationScreenProps } from "react-navigation"
 import { ViewStyle, TouchableOpacity, Image, View } from "react-native"
 
 import { Screen } from "src/views/shared/screen"
 import { spacing } from "src/theme"
 
-export interface AddEntryButtonProps {
+export interface AddEntryButtonProps extends NavigationScreenProps<{}> {
   renderScreenContent: () => React.ReactNode
 }
 
@@ -19,7 +20,7 @@ const ADD_ENTRY_CONTAINER: ViewStyle = {
   paddingHorizontal: spacing[5],
 }
 
-// @inject("mobxstuff")
+@inject("navigationStore")
 @observer
 export class AddEntryButton extends React.Component<AddEntryButtonProps, {}> {
   render() {
@@ -27,7 +28,7 @@ export class AddEntryButton extends React.Component<AddEntryButtonProps, {}> {
       <Screen preset="fixedStack">
         {this.props.renderScreenContent()}
         <View style={ADD_ENTRY_CONTAINER}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.navigationStore.navigateTo("addEntryModal")}>
             <Image source={require("src/assets/addEntryButton.png")} />
           </TouchableOpacity>
         </View>

@@ -39,12 +39,6 @@ const ACTIVE_MENU_ITEM_TEXT = {
 }
 
 export function LogbookHeader(props: LogbookHeaderProps) {
-  console.tron.display({
-    name: "Display Header Props",
-    value: {
-      props: props,
-    },
-  })
   return (
     <SafeAreaView style={HEADER}>
       <StatusBar barStyle="light-content" />

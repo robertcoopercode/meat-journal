@@ -52,4 +52,5 @@ export const color = {
   secondary: palette.stilDeGrainYellow,
   tertiary: palette.cheGuevaraRed,
   border: palette.superSilver,
+  modalBackground: "rbga(0,0,0, 0.8)",
 }

@@ -1,13 +1,14 @@
-import "../i18n"
 import * as React from "react"
-import { setupRootStore } from "./setup-root-store"
-import { StatefulNavigator } from "../navigation"
-import { RootStore } from "../app/root-store"
-import { Provider } from "mobx-react"
-import { BackButtonHandler } from "../navigation/back-button-handler"
-import { contains } from "ramda"
-import { DEFAULT_NAVIGATION_CONFIG } from "../navigation/navigation-config"
 import SplashScreen from "react-native-splash-screen"
+import { Provider } from "mobx-react"
+
+import "../i18n"
+import { BackButtonHandler } from "../navigation/back-button-handler"
+import { DEFAULT_NAVIGATION_CONFIG } from "../navigation/navigation-config"
+import { RootStore } from "../app/root-store"
+import { StatefulNavigator } from "../navigation"
+import { contains } from "ramda"
+import { setupRootStore } from "./setup-root-store"
 
 interface RootComponentState {
   rootStore?: RootStore
@@ -56,7 +57,9 @@ export class RootComponent extends React.Component<{}, RootComponentState> {
     // otherwise, we're ready to render the app
 
     // --- am: begin list of stores ---
-    const otherStores = {}
+    const otherStores = {
+      entryStore: rootStore.entryStore,
+    }
     // --- am: end list of stores ---
 
     return (

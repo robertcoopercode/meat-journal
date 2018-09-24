@@ -6,15 +6,16 @@ import { AppRegistry, YellowBox } from "react-native"
 import { RootComponent } from "./root-component"
 import { StorybookUIRoot } from "../../storybook"
 
-// Ignore a lame warning
+// Ignore lame ass warnings that appear for no understandable reason
 YellowBox.ignoreWarnings([
   "Warning: isMounted(...) is deprecated",
   "Module RCTImageLoader",
   "Sending `onAnimatedValueUpdate` with no listeners registered.",
+  "Unable to symbolicate stack trace: The stack is null",
 ])
 
 /**
- * This needs to match what's found in your app_delegate.m and MainActivity.java.
+ * This needs to match what's found in your AppDelegate.m and MainActivity.java.
  */
 const APP_NAME = "MeatJournal"
 

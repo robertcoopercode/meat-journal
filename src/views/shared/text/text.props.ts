@@ -26,4 +26,9 @@ export interface TextProps extends TextProperties {
    * One of the different types of text presets.
    */
   preset?: TextPresets
+
+  /**
+   * Sets all characters to uppercase
+   */
+  uppercase?: boolean
 }

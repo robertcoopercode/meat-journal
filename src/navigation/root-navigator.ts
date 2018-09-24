@@ -1,5 +1,6 @@
 import { createStackNavigator, createBottomTabNavigator } from "react-navigation"
 
+import { AddEntryModal } from "src/views/screens/add-entry-modal"
 import { LogbookCalendar } from "src/views/screens/logbookCalendar"
 import { LogbookHeader } from "src/navigation/logbook-header"
 import { LogbookIcon, StatisticsIcon } from "./tab-navigation-icons"
@@ -53,13 +54,38 @@ const MainTabNavigator = createBottomTabNavigator(
   },
 )
 
+// create custom transitioner without the opacity animation, ie. for iOS
+function forVertical(props) {
+  const { layout, position, scene } = props
+
+  const index = scene.index
+  const height = layout.initHeight
+
+  const translateX = 0
+  const translateY = position.interpolate({
+    inputRange: [index - 1, index, index + 1],
+    outputRange: [height, 0, 0],
+  })
+
+  return {
+    transform: [{ translateX }, { translateY }],
+  }
+}
+
 export const RootNavigator = createStackNavigator(
   {
     welcome: { screen: Welcome },
     mainTabNavigation: { screen: MainTabNavigator },
+    addEntryModal: { screen: AddEntryModal },
   },
   {
     headerMode: "none",
+    mode: "modal",
     navigationOptions: { gesturesEnabled: false },
+    cardStyle: {
+      backgroundColor: "transparent",
+      opacity: 1,
+    },
+    transitionConfig: forVertical,
   },
 )

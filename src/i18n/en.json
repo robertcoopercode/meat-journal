@@ -30,5 +30,14 @@
   },
   "statistics": {
     "header": "STATISTICS"
+  },
+  "entryModal": {
+    "addEntry": "Add Entry",
+    "nameField": "Name",
+    "animalField": "Animal",
+    "weightField": "Weight",
+    "dateField": "Date",
+    "timeField": "Time",
+    "addButton": "Add"
   }
 }
