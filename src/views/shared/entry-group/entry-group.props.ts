@@ -14,7 +14,7 @@ export interface EntryGroupProps extends TouchableOpacityProperties {
 
   date: string
   entries: {
-    type: string
+    animalType: string
     name: string
     weight: string
     time: string

@@ -6,6 +6,7 @@ import { inject, observer } from "mobx-react"
 import { NavigationStore } from "src/navigation/navigation-store"
 import { Screen } from "src/views/shared/screen"
 import { spacing } from "src/theme"
+import { Icon } from "src/views/shared/icon"
 
 export interface AddEntryButtonProps extends NavigationScreenProps<{}> {
   renderScreenContent: () => React.ReactNode
@@ -31,7 +32,7 @@ export class AddEntryButton extends React.Component<AddEntryButtonProps, {}> {
         {this.props.renderScreenContent()}
         <View style={ADD_ENTRY_CONTAINER}>
           <TouchableOpacity onPress={() => this.props.navigationStore.navigateTo("addEntryModal")}>
-            <Image source={require("src/assets/addEntryButton.png")} />
+            <Icon icon={"addEntryButton"} />
           </TouchableOpacity>
         </View>
       </Screen>

@@ -3,9 +3,17 @@ import { View } from "react-native"
 import ThirdPartyDatePicker from "react-native-datepicker"
 
 import { Text } from "src/views/shared/text"
-import { viewPresets, textPresets } from "./date-picker.presets"
 import { DatePickerProps } from "./date-picker.props"
 import { INPUT, INPUT_FOCUSED, INPUT_TEXT } from "src/views/shared/text-field"
+import { spacing } from "src/theme"
+
+const CONTAINER = {
+  paddingVertical: spacing[3],
+}
+
+const DATE_INPUT = {
+  marginTop: 18,
+}
 
 /**
  * Stateless functional component for your needs
@@ -29,15 +37,8 @@ export function DatePicker(props: DatePickerProps) {
     ...rest
   } = props
 
-  // assemble the style
-  // const viewPresetToUse = viewPresets[preset] || viewPresets.primary
-  // const textPresetToUse = textPresets[preset] || textPresets.primary
-
-  // const viewStyle = { ...viewPresetToUse, ...styleOverride }
-  // const textStyle = textPresetToUse
-
   return (
-    <View style={{ paddingVertical: 12 }}>
+    <View style={CONTAINER}>
       <Text preset="fieldLabel" tx={labelTx} />
       <ThirdPartyDatePicker
         ref={setRef}
@@ -50,7 +51,7 @@ export function DatePicker(props: DatePickerProps) {
         customStyles={{
           dateInput: {
             ...INPUT,
-            marginTop: 18,
+            ...DATE_INPUT,
             ...(isOpened ? INPUT_FOCUSED : {}),
           },
           dateText: {
@@ -61,6 +62,7 @@ export function DatePicker(props: DatePickerProps) {
         onCloseModal={onCloseModal}
         onDateChange={onDateChange}
         showIcon={false}
+        {...rest}
       />
     </View>
   )

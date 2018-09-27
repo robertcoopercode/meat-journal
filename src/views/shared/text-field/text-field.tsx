@@ -50,9 +50,11 @@ export class TextField extends React.Component<TextFieldProps, TextFieldState> {
     isFocused: false,
   }
   handleFocus = () => {
+    this.props.onFocus && this.props.onFocus()
     this.setState({ isFocused: true })
   }
   handleBlur = () => {
+    this.props.onBlur && this.props.onBlur()
     this.setState({ isFocused: false })
   }
   render() {
@@ -66,6 +68,8 @@ export class TextField extends React.Component<TextFieldProps, TextFieldState> {
       preset = "default",
       style: styleOverride,
       inputStyle: inputStyleOverride,
+      onFocus,
+      onBlur,
       ...rest
     } = this.props
     const containerStyle: ViewStyle = { ...CONTAINER, ...PRESETS[preset], ...styleOverride }
