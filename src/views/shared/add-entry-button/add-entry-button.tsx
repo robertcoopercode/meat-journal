@@ -1,13 +1,15 @@
 import * as React from "react"
-import { inject, observer } from "mobx-react"
 import { NavigationScreenProps } from "react-navigation"
 import { ViewStyle, TouchableOpacity, Image, View } from "react-native"
+import { inject, observer } from "mobx-react"
 
+import { NavigationStore } from "src/navigation/navigation-store"
 import { Screen } from "src/views/shared/screen"
 import { spacing } from "src/theme"
 
 export interface AddEntryButtonProps extends NavigationScreenProps<{}> {
   renderScreenContent: () => React.ReactNode
+  navigationStore: NavigationStore
 }
 
 const ADD_ENTRY_CONTAINER: ViewStyle = {

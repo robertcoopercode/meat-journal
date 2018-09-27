@@ -15,20 +15,24 @@ const CONTAINER: ViewStyle = {
 }
 
 // the base styling for the TextInput
-const INPUT: TextStyle = {
-  fontFamily: typography.primary,
-  color: color.text,
+export const INPUT: ViewStyle = {
   minHeight: 44,
-  fontSize: 16,
   backgroundColor: color.palette.offWhite,
   borderRadius: 5,
   borderWidth: 1,
   borderColor: color.palette.superSilver,
   paddingHorizontal: spacing[2],
   marginTop: spacing[2],
+  alignItems: "flex-start",
 }
 
-const INPUT_FOCUSED: TextStyle = {
+export const INPUT_TEXT: TextStyle = {
+  fontFamily: typography.primary,
+  color: color.text,
+  fontSize: 16,
+}
+
+export const INPUT_FOCUSED: TextStyle = {
   borderColor: color.palette.paleFlower,
   backgroundColor: color.palette.harbourAfternoon,
 }
@@ -67,6 +71,7 @@ export class TextField extends React.Component<TextFieldProps, TextFieldState> {
     const containerStyle: ViewStyle = { ...CONTAINER, ...PRESETS[preset], ...styleOverride }
     const inputStyle: TextStyle = {
       ...INPUT,
+      ...INPUT_TEXT,
       ...(this.state.isFocused ? INPUT_FOCUSED : {}),
       ...inputStyleOverride,
     }
@@ -82,7 +87,7 @@ export class TextField extends React.Component<TextFieldProps, TextFieldState> {
           placeholderTextColor={color.palette.lighterGrey}
           underlineColorAndroid={color.transparent}
           ref={setRef}
-          returnKeyType={"next"}
+          returnKeyType={"done"}
           onSubmitEditing={onSubmitEditing}
           {...rest}
           style={inputStyle}
