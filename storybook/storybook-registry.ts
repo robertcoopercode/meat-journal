@@ -1,5 +1,6 @@
 require("../src/views/shared/text/text.story")
 require("../src/views/shared/button/button.story")
+require("../src/views/shared/date-picker/date-picker.story")
 require("../src/views/shared/entry-group/entry-group.story")
 require("../src/views/shared/form-row/form-row.story")
 require("../src/views/shared/switch/switch.story")

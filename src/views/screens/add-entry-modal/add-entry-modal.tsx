@@ -1,16 +1,24 @@
 import * as React from "react"
-import { observer } from "mobx-react"
-import { Image, ViewStyle, View, TextStyle, TouchableOpacity, SafeAreaView } from "react-native"
+import { inject, observer } from "mobx-react"
+import {
+  Image,
+  SafeAreaView,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  ScrollView,
+} from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
+import { DatePicker } from "src/views/shared/date-picker"
 import { Text } from "src/views/shared/text"
 import { Button } from "src/views/shared/button"
 import { TextField } from "src/views/shared/text-field"
 import { Screen } from "src/views/shared/screen"
 import { color, spacing } from "src/theme"
 import { NavigationScreenProps } from "react-navigation"
-
-export interface AddEntryModalScreenProps extends NavigationScreenProps<{}> {}
+import { EntryStoreModel } from "src/models/entry-store"
 
 const ROOT: ViewStyle = {
   backgroundColor: "rgba(0,0,0, 0.6)",
@@ -47,22 +55,84 @@ const MODAL_FORM_HEADER_TEXT: TextStyle = {
 }
 
 const MODAL_FORM_SUBMIT: ViewStyle = {
+  marginTop: 20,
   alignSelf: "center",
 }
 
-// @inject("navigationStore")
+export interface AddEntryModalScreenProps extends NavigationScreenProps<{}> {
+  entryStore: typeof EntryStoreModel.Type
+}
+
+interface AddEntryModalScreenState {
+  animalType: string
+  date: string
+  name: string
+  openedDatePicker: boolean
+  openedTimePicker: boolean
+  time: string
+  weight: string
+}
+
+@inject("entryStore")
 @observer
-export class AddEntryModal extends React.Component<AddEntryModalScreenProps, {}> {
+export class AddEntryModal extends React.Component<
+  AddEntryModalScreenProps,
+  AddEntryModalScreenState
+> {
+  // Class properties Type definitions
+  inputs: {
+    animalType: any
+    date: any
+    name: any
+    time: any
+    weight: any
+  }
+  scroll: any
+
+  state = {
+    animalType: "",
+    date: "16/09/2018",
+    name: "",
+    openedDatePicker: false,
+    openedTimePicker: false,
+    time: "10:00 PM",
+    weight: null,
+  }
   static navigationOptions = {}
-  constructor() {
-    super()
-    this.inputs = {}
+  constructor(props) {
+    super(props)
+    // Initialize the refs with nothings so there are no errors when
+    // trying to access a ref before it is set in React
+    this.inputs = {
+      date: null,
+      time: null,
+      animalType: null,
+      name: null,
+      weight: null,
+    }
   }
   setInputRef = inputName => input => {
     this.inputs[inputName] = input
   }
   handleOnSubmitEditing = inputName => () => {
     this.inputs[inputName].focus()
+  }
+  handleDateClose = () => {
+    this.setState({ openedDatePicker: false })
+    // Open the time picker after the date picker closes
+    // setTimeout(this.inputs.time.onPressDate, 500)
+  }
+  handleSubmit = () => {
+    // MOBX
+    const entry = {
+      animalType: this.state.animalType,
+      name: this.state.name,
+      weight: this.state.weight,
+      date: this.state.date,
+      time: this.state.time,
+    }
+    this.props.entryStore.add(entry)
+    this.props.navigation.goBack()
   }
   render() {
     return (
@@ -84,29 +154,81 @@ export class AddEntryModal extends React.Component<AddEntryModalScreenProps, {}>
                 <View style={MODAL_FORM_BODY}>
                   <TextField
                     labelTx={"entryModal.nameField"}
-                    setRef={this.setInputRef("name")}
-                    onSubmitEditing={this.handleOnSubmitEditing("animal")}
+                    setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
+                    // focus on the next input after pressing "next" on the keyboard
+                    autoCapitalize={"none"}
+                    onChangeText={text => this.setState({ name: text })}
                   />
+                  {/* Make a custom dropdown here instead */}
                   <TextField
                     labelTx={"entryModal.animalField"}
                     setRef={this.setInputRef("animal")}
-                    onSubmitEditing={this.handleOnSubmitEditing("weight")}
+                    autoCapitalize={"none"}
+                    onChangeText={text => this.setState({ animalType: text })}
+                    style={{ zIndex: 2 }} // zIndex required to appear above dropdown
                   />
+                  <View style={{ overflow: "visible", zIndex: 1 }}>
+                    <ScrollView
+                      style={{
+                        maxHeight: 200,
+                        position: "absolute",
+                        width: "100%",
+                        backgroundColor: "white",
+                        borderBottomLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                        borderColor: color.palette.paleFlower,
+                        borderWidth: 1,
+                        borderTopWidth: 0,
+                        paddingVertical: spacing[2],
+                        marginTop: -spacing[3] - spacing[2],
+                      }}
+                    >
+                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
+                        <Text>Cow</Text>
+                      </View>
+                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
+                        <Text>Porc</Text>
+                      </View>
+                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
+                        <Text>Lamb</Text>
+                      </View>
+                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
+                        <Text>Horse</Text>
+                      </View>
+                    </ScrollView>
+                  </View>
                   <TextField
                     labelTx={"entryModal.weightField"}
                     setRef={this.setInputRef("weight")}
-                    onSubmitEditing={this.handleOnSubmitEditing("date")}
+                    keyboardType={"numeric"}
+                    onChangeText={text => this.setState({ weight: text })}
                   />
-                  <TextField
-                    labelTx={"entryModal.dateField"}
+                  <DatePicker
                     setRef={this.setInputRef("date")}
-                    onSubmitEditing={this.handleOnSubmitEditing("time")}
+                    labelTx={"entryModal.dateField"}
+                    type="date"
+                    date={this.state.date}
+                    onOpenModal={() => this.setState({ openedDatePicker: true })}
+                    onCloseModal={this.handleDateClose}
+                    onDateChange={date => this.setState({ date: date })}
+                    isOpened={this.state.openedDatePicker}
+                    format={"DD/MM/YYYY"}
                   />
-                  <TextField labelTx={"entryModal.timeField"} setRef={this.setInputRef("time")} />
+                  <DatePicker
+                    setRef={this.setInputRef("time")}
+                    labelTx={"entryModal.timeField"}
+                    type="time"
+                    time={this.state.time}
+                    onOpenModal={() => this.setState({ openedTimePicker: true })}
+                    onCloseModal={() => this.setState({ openedTimePicker: false })}
+                    onDateChange={time => this.setState({ time: time })}
+                    isOpened={this.state.openedTimePicker}
+                    format={"h:mm A"}
+                  />
                   <Button
                     style={MODAL_FORM_SUBMIT}
                     tx={"entryModal.addButton"}
-                    onPress={() => this.props.navigation.goBack()}
+                    onPress={this.handleSubmit}
                   />
                 </View>
               </KeyboardAwareScrollView>

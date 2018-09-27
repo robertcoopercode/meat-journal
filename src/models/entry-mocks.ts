@@ -1,127 +1,177 @@
 export const MOCK_ENTRIES = [
   {
-    id: "7853362d-3533-c09d-a74e-8992b75f52cb",
-    createdAt: "1537755475066",
-    type: "cow",
-    name: "Ground Beef",
-    weightLbs: 1.2,
-    weightKgs: 1.2,
-    time: "10:00 PM",
     date: "16/09/2018",
+    data: [
+      {
+        id: "7853362d-3533-c09d-a74e-8992b75f52cb",
+        dateTimestamp: 1537760545079,
+        animalType: "cow",
+        name: "Ground Beef",
+        weightLbs: 1.2,
+        weightKgs: 1.2,
+        time: "10:00 PM",
+        date: "16/09/2018",
+      },
+      {
+        id: "e284dc26-a076-12f7-27df-5d57af6c1bc8",
+        dateTimestamp: 1537760545079,
+        animalType: "porc",
+        name: "Bacon",
+        weightLbs: 0.5,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "16/09/2018",
+      },
+    ],
   },
   {
-    id: "e284dc26-a076-12f7-27df-5d57af6c1bc8",
-    createdAt: "1537755475066",
-    type: "porc",
-    name: "Bacon",
-    weightLbs: 0.5,
-    weightKgs: 1.2,
-    time: "10:30 PM",
-    date: "16/09/2018",
-  },
-  {
-    id: "146d9084-5e03-a95a-50b3-0c509d89c62c",
-    createdAt: "1537755475066",
-    type: "cow",
-    name: "Ground Beef",
-    weightLbs: 0.5,
-    weightKgs: 1.2,
-    time: "10:30 PM",
     date: "15/09/2018",
+    data: [
+      {
+        id: "146d9084-5e03-a95a-50b3-0c509d89c62c",
+        dateTimestamp: 1537760545079,
+        animalType: "cow",
+        name: "Ground Beef",
+        weightLbs: 0.5,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "15/09/2018",
+      },
+      {
+        id: "025d8b57-af2a-552a-5440-735f7dac1e06",
+        dateTimestamp: 1537760545079,
+        animalType: "lamb",
+        name: "Lamb",
+        weightLbs: 0.5,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "15/09/2018",
+      },
+    ],
   },
   {
-    id: "025d8b57-af2a-552a-5440-735f7dac1e06",
-    createdAt: "1537755475066",
-    type: "lamb",
-    name: "Lamb",
-    weightLbs: 0.5,
-    weightKgs: 1.2,
-    time: "10:30 PM",
-    date: "15/09/2018",
+    date: "14/09/2018",
+    data: [
+      {
+        id: "2852b1fe-b69b-8fc8-e10c-336d269ff304",
+        dateTimestamp: 1537760545079,
+        animalType: "cow",
+        name: "Beef Cubes",
+        weightLbs: 2.0,
+        weightKgs: 2.0,
+        time: "10:30 PM",
+        date: "14/09/2018",
+      },
+      {
+        id: "9d18614a-7496-36c4-f869-e1ee1722b4db",
+        dateTimestamp: 1537760545079,
+        animalType: "porc",
+        name: "Porc Chops",
+        weightLbs: 0.5,
+        weightKgs: 0.5,
+        time: "10:30 PM",
+        date: "14/09/2018",
+      },
+    ],
+  },
+  {
+    date: "13/09/2018",
+    data: [
+      {
+        id: "9c213ba7-5689-3c04-172d-5da8063f09ae",
+        dateTimestamp: 1537760545079,
+        animalType: "lamb",
+        name: "Lamb",
+        weightLbs: 1.2,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "13/09/2018",
+      },
+      {
+        id: "d1413599-7757-5ace-77d7-596ef46fb80a",
+        dateTimestamp: 1537760545079,
+        animalType: "porc",
+        name: "Ground Porc",
+        weightLbs: 0.8,
+        weightKgs: 0.8,
+        time: "10:30 PM",
+        date: "13/09/2018",
+      },
+    ],
+  },
+  {
+    date: "12/09/2018",
+    data: [
+      {
+        id: "686d62b7-e719-aeb1-2d30-41f4bcd759f5",
+        dateTimestamp: 1537760545079,
+        animalType: "horse",
+        name: "Horse Flank",
+        weightLbs: 1.2,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "12/09/2018",
+      },
+      {
+        id: "7dae8a56-6e0f-a656-e2f1-d72001f0c146",
+        dateTimestamp: 1537760545079,
+        animalType: "cow",
+        name: "Steak",
+        weightLbs: 1.2,
+        weightKgs: 1.2,
+        time: "10:30 PM",
+        date: "12/09/2018",
+      },
+    ],
+  },
+  {
+    date: "11/09/2018",
+    data: [
+      {
+        id: "3e310e53-e374-4b87-8876-1d8b86a6ad52",
+        dateTimestamp: 1537760545079,
+        animalType: "duck",
+        name: "Duck Breast",
+        weightLbs: 0.7,
+        weightKgs: 0.7,
+        time: "10:30 PM",
+        date: "11/09/2018",
+      },
+      {
+        id: "58e4e78b-2729-196e-9665-9715378d4c0e",
+        dateTimestamp: 1537760545079,
+        animalType: "cow",
+        name: "Beef Flank",
+        weightLbs: 1.4,
+        weightKgs: 1.4,
+        time: "10:30 PM",
+        date: "11/09/2018",
+      },
+    ],
+  },
+  {
+    date: "10/09/2018",
+    data: [
+      {
+        id: "330e3443-559f-43d2-a0f9-37dde64e194e",
+        dateTimestamp: 1537760545079,
+        animalType: "lamb",
+        name: "Lamb Chops",
+        weightLbs: 0.4,
+        weightKgs: 0.4,
+        time: "10:30 PM",
+        date: "10/09/2018",
+      },
+      {
+        id: "073672fe-21b3-f552-3d63-8e40eae3db0e",
+        dateTimestamp: 1537760545079,
+        animalType: "porc",
+        name: "Ground Porc",
+        weightLbs: 2.2,
+        weightKgs: 2.2,
+        time: "10:30 PM",
+        date: "10/09/2018",
+      },
+    ],
   },
 ]
-// <EntryGroup
-//   date={`September 14`.toUpperCase()}
-//   entries={[
-//     {
-//       type: "cow",
-//       name: "Beef Cubes",
-//       weight: "2.0 lbs",
-//       time: "9:00 PM",
-//     },
-//     {
-//       type: "porc",
-//       name: "Porc Chops",
-//       weight: "0.5 lbs",
-//       time: "9:15 PM",
-//     },
-//   ]}
-// />
-// <EntryGroup
-//   date={`September 13`.toUpperCase()}
-//   entries={[
-//     {
-//       type: "lamb",
-//       name: "Lamb",
-//       weight: "1.2 lbs",
-//       time: "9:00 PM",
-//     },
-//     {
-//       type: "porc",
-//       name: "Ground Porc",
-//       weight: "0.8 lbs",
-//       time: "9:30 PM",
-//     },
-//   ]}
-// />
-// <EntryGroup
-//   date={`September 12`.toUpperCase()}
-//   entries={[
-//     {
-//       type: "horse",
-//       name: "Horse Flank",
-//       weight: "1.2 lbs",
-//       time: "9:00 PM",
-//     },
-//     {
-//       type: "cow",
-//       name: "Steak",
-//       weight: "1.2 lbs",
-//       time: "9:30 PM",
-//     },
-//   ]}
-// />
-// <EntryGroup
-//   date={`September 11`.toUpperCase()}
-//   entries={[
-//     {
-//       type: "duck",
-//       name: "Duck Breast",
-//       weight: "0.8 lbs",
-//       time: "9:00 PM",
-//     },
-//     {
-//       type: "cow",
-//       name: "Beef Flank",
-//       weight: "1.4 lbs",
-//       time: "9:30 PM",
-//     },
-//   ]}
-// />
-// <EntryGroup
-//   date={`September 10`.toUpperCase()}
-//   entries={[
-//     {
-//       type: "lamb",
-//       name: "Lamb Chops",
-//       weight: "0.4 lbs",
-//       time: "9:00 PM",
-//     },
-//     {
-//       type: "porc",
-//       name: "Ground Porc",
-//       weight: "2.2 lbs",
-//       time: "9:30 PM",
-//     },
-//   ]}
-// />

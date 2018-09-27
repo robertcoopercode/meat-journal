@@ -65,8 +65,8 @@ export function EntryGroup(props: EntryGroupProps) {
   const viewStyle = { ...viewPresetToUse, ...styleOverride }
   const textStyle = textPresetToUse
 
-  const renderAnimalImage = type => {
-    switch (type) {
+  const renderAnimalImage = animalType => {
+    switch (animalType) {
       case "cow":
         return <Image source={require("src/assets/cow.png")} />
       case "porc":
@@ -95,7 +95,7 @@ export function EntryGroup(props: EntryGroupProps) {
           key={index}
           onPress={() => null}
         >
-          <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.type)}</View>
+          <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.animalType)}</View>
           <View style={LOG_ENTRY_DETAILS}>
             <Text preset="fieldLabel">{entry.name}</Text>
             <Text style={LOG_ENTRY_DETAILS_WEIGHT}>{entry.weight}</Text>

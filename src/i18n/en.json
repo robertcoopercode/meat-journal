@@ -36,7 +36,7 @@
     "nameField": "Name",
     "animalField": "Animal",
     "weightField": "Weight",
-    "dateField": "Date",
+    "dateField": "Date (DD-MM-YYYY)",
     "timeField": "Time",
     "addButton": "Add"
   }

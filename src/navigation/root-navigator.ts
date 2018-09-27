@@ -1,10 +1,10 @@
 import { createStackNavigator, createBottomTabNavigator } from "react-navigation"
 
 import { AddEntryModal } from "src/views/screens/add-entry-modal"
-import { LogbookCalendar } from "src/views/screens/logbookCalendar"
+import { LogbookCalendar } from "src/views/screens/logbook-calendar"
 import { LogbookHeader } from "src/navigation/logbook-header"
 import { LogbookIcon, StatisticsIcon } from "./tab-navigation-icons"
-import { LogbookList } from "src/views/screens/logbookList"
+import { LogbookList } from "src/views/screens/logbook-list"
 import { Statistics } from "src/views/screens/statistics"
 import { Welcome } from "src/views/screens/welcome"
 import { color } from "src/theme/color"
