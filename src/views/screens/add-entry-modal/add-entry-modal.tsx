@@ -11,14 +11,15 @@ import {
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
-import { DatePicker } from "src/views/shared/date-picker"
-import { Text } from "src/views/shared/text"
 import { Button } from "src/views/shared/button"
-import { TextField } from "src/views/shared/text-field"
-import { Screen } from "src/views/shared/screen"
-import { color, spacing } from "src/theme"
-import { NavigationScreenProps } from "react-navigation"
+import { DatePicker } from "src/views/shared/date-picker"
 import { EntryStoreModel } from "src/models/entry-store"
+import { NavigationScreenProps } from "react-navigation"
+import { Screen } from "src/views/shared/screen"
+import { Text } from "src/views/shared/text"
+import { TextField } from "src/views/shared/text-field"
+import { color, spacing } from "src/theme"
+import { Icon } from "src/views/shared/icon"
 
 const ROOT: ViewStyle = {
   backgroundColor: "rgba(0,0,0, 0.6)",
@@ -65,12 +66,14 @@ export interface AddEntryModalScreenProps extends NavigationScreenProps<{}> {
 
 interface AddEntryModalScreenState {
   animalType: string
+  animalFieldFocused: boolean
   date: string
   name: string
   openedDatePicker: boolean
   openedTimePicker: boolean
   time: string
   weight: string
+  filteredAnimalTypes: string[]
 }
 
 @inject("entryStore")
@@ -87,17 +90,23 @@ export class AddEntryModal extends React.Component<
     time: any
     weight: any
   }
+
   scroll: any
+
+  animalTypes = ["cow", "porc", "duck", "horse", "lamb"]
 
   state = {
     animalType: "",
+    animalFieldFocused: false,
     date: "16/09/2018",
     name: "",
     openedDatePicker: false,
     openedTimePicker: false,
     time: "10:00 PM",
     weight: null,
+    filteredAnimalTypes: this.animalTypes,
   }
+
   static navigationOptions = {}
   constructor(props) {
     super(props)
@@ -134,11 +143,57 @@ export class AddEntryModal extends React.Component<
     this.props.entryStore.add(entry)
     this.props.navigation.goBack()
   }
+  handleAnimalFieldFocus = () => {
+    this.setState({ animalFieldFocused: true })
+  }
+  handleAnimalFieldBlur = () => {
+    this.setState({ animalFieldFocused: false })
+  }
+  handleAnimalFieldChange = text => {
+    this.setState(state => {
+      const filteredAnimalTypes = this.animalTypes.filter(animalType => animalType.includes(text))
+      return {
+        filteredAnimalTypes,
+        animalType: text,
+      }
+    })
+  }
+  handleAnimalFieldSelect = animalType => {
+    this.setState({ animalType, animalFieldFocused: false })
+    this.inputs.animalType.blur()
+  }
+  handleWeightFieldChange = text => {
+    let parsedNumber = parseFloat(text)
+    console.tron.log(text)
+    if (isNaN(text)) {
+      this.setState(state => ({
+        weight: state.weight,
+      }))
+      return console.tron.log("INVALID NUMBER")
+    } else if (parsedNumber > 100) {
+      return console.tron.log("Only weights under 100 can be entered")
+    } else if (text.includes(".") && text.split(".")[1].length > 2) {
+      parsedNumber = Math.round(parsedNumber * 100) / 100
+      return this.setState({ weight: parsedNumber.toString() })
+    }
+    return this.setState({ weight: text })
+  }
+  renderFilteredAnimalTypes = () => {
+    return this.state.filteredAnimalTypes.map(animalType => (
+      <TouchableOpacity
+        key={animalType}
+        style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}
+        onPress={() => this.handleAnimalFieldSelect(animalType)}
+      >
+        <Text>{animalType}</Text>
+      </TouchableOpacity>
+    ))
+  }
   render() {
     return (
       <Screen style={ROOT} preset="fixedStack">
         <TouchableOpacity style={EXIT} onPress={() => this.props.navigation.goBack()}>
-          <Image source={require("src/assets/Exit.png")} />
+          <Icon icon="exit" />
         </TouchableOpacity>
         <View style={MODAL}>
           <SafeAreaView>
@@ -147,6 +202,7 @@ export class AddEntryModal extends React.Component<
                 <Text style={MODAL_FORM_HEADER_TEXT} uppercase tx={"entryModal.addEntry"} />
               </View>
               <KeyboardAwareScrollView
+                keyboardShouldPersistTaps={"always"}
                 innerRef={ref => {
                   this.scroll = ref
                 }}
@@ -161,47 +217,43 @@ export class AddEntryModal extends React.Component<
                   />
                   {/* Make a custom dropdown here instead */}
                   <TextField
+                    onFocus={this.handleAnimalFieldFocus}
+                    onBlur={this.handleAnimalFieldBlur}
                     labelTx={"entryModal.animalField"}
-                    setRef={this.setInputRef("animal")}
+                    setRef={this.setInputRef("animalType")}
                     autoCapitalize={"none"}
-                    onChangeText={text => this.setState({ animalType: text })}
+                    value={this.state.animalType}
+                    onChangeText={this.handleAnimalFieldChange}
                     style={{ zIndex: 2 }} // zIndex required to appear above dropdown
                   />
-                  <View style={{ overflow: "visible", zIndex: 1 }}>
-                    <ScrollView
-                      style={{
-                        maxHeight: 200,
-                        position: "absolute",
-                        width: "100%",
-                        backgroundColor: "white",
-                        borderBottomLeftRadius: 5,
-                        borderBottomRightRadius: 5,
-                        borderColor: color.palette.paleFlower,
-                        borderWidth: 1,
-                        borderTopWidth: 0,
-                        paddingVertical: spacing[2],
-                        marginTop: -spacing[3] - spacing[2],
-                      }}
-                    >
-                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
-                        <Text>Cow</Text>
-                      </View>
-                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
-                        <Text>Porc</Text>
-                      </View>
-                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
-                        <Text>Lamb</Text>
-                      </View>
-                      <View style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}>
-                        <Text>Horse</Text>
-                      </View>
-                    </ScrollView>
-                  </View>
+                  {this.state.animalFieldFocused && (
+                    <View style={{ overflow: "visible", zIndex: 1 }}>
+                      <ScrollView
+                        keyboardShouldPersistTaps={"always"}
+                        style={{
+                          maxHeight: 185,
+                          position: "absolute",
+                          width: "100%",
+                          backgroundColor: "white",
+                          borderBottomLeftRadius: 5,
+                          borderBottomRightRadius: 5,
+                          borderColor: color.palette.paleFlower,
+                          borderWidth: 1,
+                          borderTopWidth: 0,
+                          paddingTop: spacing[2],
+                          marginTop: -spacing[3] - spacing[2],
+                        }}
+                      >
+                        {this.renderFilteredAnimalTypes()}
+                      </ScrollView>
+                    </View>
+                  )}
                   <TextField
                     labelTx={"entryModal.weightField"}
                     setRef={this.setInputRef("weight")}
                     keyboardType={"numeric"}
-                    onChangeText={text => this.setState({ weight: text })}
+                    value={this.state.weight}
+                    onChangeText={this.handleWeightFieldChange}
                   />
                   <DatePicker
                     setRef={this.setInputRef("date")}

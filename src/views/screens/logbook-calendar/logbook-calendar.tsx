@@ -1,13 +1,13 @@
 import * as React from "react"
-import { observer } from "mobx-react"
-import { NavigationScreenProps } from "react-navigation"
 import { Calendar } from "react-native-calendars"
+import { NavigationScreenProps } from "react-navigation"
 import { ViewStyle } from "react-native"
+import { observer } from "mobx-react"
 
 import { AddEntryButton } from "src/views/shared/add-entry-button"
 import { EntryGroup } from "src/views/shared/entry-group"
-import { Screen } from "../../shared/screen"
-import { color } from "../../../theme"
+import { Screen } from "src/views/shared/screen"
+import { color } from "src/theme"
 
 export interface LogbookCalendarScreenProps extends NavigationScreenProps<{}> {}
 

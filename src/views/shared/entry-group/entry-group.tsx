@@ -1,14 +1,10 @@
 import * as React from "react"
-import { Image, ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 
-import { Text } from "../text"
-import { viewPresets, textPresets } from "./entry-group.presets"
+import { Text } from "src/views/shared/text"
 import { EntryGroupProps } from "./entry-group.props"
-import { color, spacing } from "../../../theme"
-
-// const LOG_ENTRY_GROUP = {
-//   alignItems: "stretch",
-// }
+import { color, spacing } from "src/theme"
+import { Icon } from "src/views/shared/icon"
 
 const LOG_ENTRY_DATE: TextStyle = {
   paddingLeft: spacing[4],
@@ -55,30 +51,20 @@ const LOG_ENTRY_TIME: ViewStyle = {
  * Component description here for TypeScript tips.
  */
 export function EntryGroup(props: EntryGroupProps) {
-  // grab the props
-  const { preset = "primary", tx, text, style: styleOverride, ...rest } = props
-
-  // assemble the style
-  const viewPresetToUse = viewPresets[preset] || viewPresets.primary
-  const textPresetToUse = textPresets[preset] || textPresets.primary
-
-  const viewStyle = { ...viewPresetToUse, ...styleOverride }
-  const textStyle = textPresetToUse
-
   const renderAnimalImage = animalType => {
     switch (animalType) {
       case "cow":
-        return <Image source={require("src/assets/cow.png")} />
+        return <Icon icon={"cow"} />
       case "porc":
-        return <Image source={require("src/assets/pig.png")} />
+        return <Icon icon={"porc"} />
       case "duck":
-        return <Image source={require("src/assets/duck.png")} />
+        return <Icon icon={"duck"} />
       case "horse":
-        return <Image source={require("src/assets/horse.png")} />
+        return <Icon icon={"horse"} />
       case "lamb":
-        return <Image source={require("src/assets/sheep.png")} />
+        return <Icon icon={"lamb"} />
       default:
-        return <Image source={require("src/assets/cow.png")} />
+        return <Icon icon={"cow"} />
     }
   }
 

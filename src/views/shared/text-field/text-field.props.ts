@@ -36,5 +36,7 @@ export interface TextFieldProps extends TextInputProperties {
    */
   preset?: "default"
 
-  setRef: (any) => void
+  setRef?: (any) => void
+  onFocus?: () => void
+  onBlur?: () => void
 }

@@ -1,5 +1,4 @@
-import { ViewStyle, TouchableOpacityProperties } from "react-native"
-import { DatePickerPresetNames } from "./date-picker.presets"
+import { TouchableOpacityProperties } from "react-native"
 
 export interface DatePickerProps extends TouchableOpacityProperties {
   labelTx: string
