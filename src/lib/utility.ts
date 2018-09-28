@@ -19,3 +19,7 @@ export const createJSDate = unformattedDate => {
   let day = parseInt(unformattedDate.substring(0, 2))
   return new Date(year, month, day)
 }
+
+export const dashedDateFormatConversion = date => {
+  return format(createJSDate(date), "YYYY-MM-DD")
+}
