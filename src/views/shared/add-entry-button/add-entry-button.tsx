@@ -1,6 +1,6 @@
 import * as React from "react"
 import { NavigationScreenProps } from "react-navigation"
-import { ViewStyle, TouchableOpacity, Image, View } from "react-native"
+import { ViewStyle, TouchableOpacity, View } from "react-native"
 import { inject, observer } from "mobx-react"
 
 import { NavigationStore } from "src/navigation/navigation-store"
@@ -31,7 +31,9 @@ export class AddEntryButton extends React.Component<AddEntryButtonProps, {}> {
       <Screen preset="fixedStack">
         {this.props.renderScreenContent()}
         <View style={ADD_ENTRY_CONTAINER}>
-          <TouchableOpacity onPress={() => this.props.navigationStore.navigateTo("addEntryModal")}>
+          <TouchableOpacity
+            onPress={() => this.props.navigationStore.navigateTo("entryModal", { type: "add" })}
+          >
             <Icon icon={"addEntryButton"} />
           </TouchableOpacity>
         </View>

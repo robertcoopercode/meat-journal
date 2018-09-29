@@ -1,6 +1,6 @@
 export const MOCK_ENTRIES = [
   {
-    date: "16/09/2018",
+    date: "28/09/2018",
     data: [
       {
         id: "7853362d-3533-c09d-a74e-8992b75f52cb",
@@ -25,7 +25,7 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "15/09/2018",
+    date: "26/09/2018",
     data: [
       {
         id: "146d9084-5e03-a95a-50b3-0c509d89c62c",
@@ -40,8 +40,8 @@ export const MOCK_ENTRIES = [
       {
         id: "025d8b57-af2a-552a-5440-735f7dac1e06",
         dateTimestamp: 1537760545079,
-        animalType: "lamb",
-        name: "Lamb",
+        animalType: "buffalo",
+        name: "Buffalo Steak",
         weightLbs: 0.5,
         weightKgs: 1.2,
         time: "10:30 PM",
@@ -50,13 +50,13 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "14/09/2018",
+    date: "25/09/2018",
     data: [
       {
         id: "2852b1fe-b69b-8fc8-e10c-336d269ff304",
         dateTimestamp: 1537760545079,
-        animalType: "cow",
-        name: "Beef Cubes",
+        animalType: "shellfish",
+        name: "Lobster",
         weightLbs: 2.0,
         weightKgs: 2.0,
         time: "10:30 PM",
@@ -65,8 +65,8 @@ export const MOCK_ENTRIES = [
       {
         id: "9d18614a-7496-36c4-f869-e1ee1722b4db",
         dateTimestamp: 1537760545079,
-        animalType: "porc",
-        name: "Porc Chops",
+        animalType: "kangaroo",
+        name: "Kangaroo Liver",
         weightLbs: 0.5,
         weightKgs: 0.5,
         time: "10:30 PM",
@@ -75,13 +75,13 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "13/09/2018",
+    date: "23/09/2018",
     data: [
       {
         id: "9c213ba7-5689-3c04-172d-5da8063f09ae",
         dateTimestamp: 1537760545079,
-        animalType: "lamb",
-        name: "Lamb",
+        animalType: "chicken",
+        name: "Chicken Wings",
         weightLbs: 1.2,
         weightKgs: 1.2,
         time: "10:30 PM",
@@ -90,8 +90,8 @@ export const MOCK_ENTRIES = [
       {
         id: "d1413599-7757-5ace-77d7-596ef46fb80a",
         dateTimestamp: 1537760545079,
-        animalType: "porc",
-        name: "Ground Porc",
+        animalType: "fish",
+        name: "Salmon",
         weightLbs: 0.8,
         weightKgs: 0.8,
         time: "10:30 PM",
@@ -100,7 +100,7 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "12/09/2018",
+    date: "21/09/2018",
     data: [
       {
         id: "686d62b7-e719-aeb1-2d30-41f4bcd759f5",
@@ -115,8 +115,8 @@ export const MOCK_ENTRIES = [
       {
         id: "7dae8a56-6e0f-a656-e2f1-d72001f0c146",
         dateTimestamp: 1537760545079,
-        animalType: "cow",
-        name: "Steak",
+        animalType: "turkey",
+        name: "Turkey",
         weightLbs: 1.2,
         weightKgs: 1.2,
         time: "10:30 PM",
@@ -125,7 +125,7 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "11/09/2018",
+    date: "18/09/2018",
     data: [
       {
         id: "3e310e53-e374-4b87-8876-1d8b86a6ad52",
@@ -150,7 +150,7 @@ export const MOCK_ENTRIES = [
     ],
   },
   {
-    date: "10/09/2018",
+    date: "15/09/2018",
     data: [
       {
         id: "330e3443-559f-43d2-a0f9-37dde64e194e",

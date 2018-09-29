@@ -65,8 +65,19 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
      *
      * @param routeName The route name.
      */
-    navigateTo(routeName: string) {
-      self.dispatch(NavigationActions.navigate({ routeName }))
+    navigateTo(routeName: string, params: { type?: "add" | "edit" } = {}) {
+      self.dispatch(NavigationActions.navigate({ routeName, params }))
+    },
+
+    /**
+     * Navigate to another place.
+     *
+     * @param entry The entry to be edited.
+     */
+    navigateToEditEntry(entry) {
+      self.dispatch(
+        NavigationActions.navigate({ routeName: "entryModal", params: { entry, type: "edit" } }),
+      )
     },
   }))
 

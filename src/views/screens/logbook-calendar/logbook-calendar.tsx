@@ -3,6 +3,7 @@ import { Calendar } from "react-native-calendars"
 import { NavigationScreenProps } from "react-navigation"
 import { ViewStyle } from "react-native"
 import { inject, observer } from "mobx-react"
+import format from "date-fns/format"
 
 import { AddEntryButton } from "src/views/shared/add-entry-button"
 import { EntryGroup } from "src/views/shared/entry-group"
@@ -38,9 +39,24 @@ export class LogbookCalendar extends React.Component<LogbookCalendarScreenProps,
         obj[Object.keys(item)[0]] = item[Object.keys(item)[0]]
         return obj
       }, {}),
+    currentEntries:
+      (this.props.entryStore.getDateEntries(format(new Date(), "YYYY-MM-DD"))[0] &&
+        this.props.entryStore.getDateEntries(format(new Date(), "YYYY-MM-DD"))[0].data) ||
+      [],
+    currentDate:
+      (this.props.entryStore.getDateEntries(format(new Date(), "YYYY-MM-DD"))[0] &&
+        this.props.entryStore.getDateEntries(format(new Date(), "YYYY-MM-DD"))[0].date) ||
+      "",
   }
   handleDaySelection = day => {
-    console.tron.log(day)
+    let selectedDateEntries = []
+    let selectedDate = ""
+    if (this.props.entryStore.getDateEntries(day.dateString)[0]) {
+      selectedDate = this.props.entryStore.getDateEntries(day.dateString)[0].date
+      selectedDateEntries = this.props.entryStore.getDateEntries(day.dateString)[0].data
+    }
+    console.tron.log(selectedDateEntries)
+    this.setState({ currentDate: selectedDate, currentEntries: selectedDateEntries })
     this.setState(state => {
       const unselectedDates = Object.keys(state.markedDates).reduce((obj, date) => {
         obj[date] = { ...state.markedDates[date], selected: false }
@@ -60,27 +76,17 @@ export class LogbookCalendar extends React.Component<LogbookCalendarScreenProps,
         renderScreenContent={() => (
           <Screen style={ROOT} preset="scrollStack">
             <Calendar
-              theme={{ arrowColor: color.primary }}
+              theme={{
+                arrowColor: color.primary,
+                selectedDayBackgroundColor: color.primary,
+                dotColor: color.tertiary,
+              }}
               markedDates={this.state.markedDates}
               onDayPress={this.handleDaySelection}
             />
-            <EntryGroup
-              date={`Today`.toUpperCase()}
-              entries={[
-                {
-                  type: "cow",
-                  name: "Ground Beef",
-                  weight: "1.2 lbs",
-                  time: "10:00 PM",
-                },
-                {
-                  type: "porc",
-                  name: "Bacon",
-                  weight: "0.5 lbs",
-                  time: "10:30 PM",
-                },
-              ]}
-            />
+            {this.state.currentEntries.length > 0 && (
+              <EntryGroup date={this.state.currentDate} entries={this.state.currentEntries} />
+            )}
           </Screen>
         )}
       />

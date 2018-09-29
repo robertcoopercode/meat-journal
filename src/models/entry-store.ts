@@ -2,6 +2,7 @@ import { types } from "mobx-state-tree"
 import { uniqueId } from "src/lib/utility"
 import isBefore from "date-fns/is_before"
 import { createJSDate } from "src/lib/utility"
+import { dashedDateFormatConversion } from "src/lib/utility"
 
 const Entry = types.model("Entry", {
   id: types.string,
@@ -65,6 +66,11 @@ export const EntryStoreModel = types
       }
       self.entries = self.entries.sort(sortDateEntryArray)
       return
+    },
+  }))
+  .views(self => ({
+    getDateEntries(date) {
+      return self.entries.filter(entry => dashedDateFormatConversion(entry.date) === date)
     },
   }))
 

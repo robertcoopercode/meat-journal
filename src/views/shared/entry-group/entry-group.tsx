@@ -1,10 +1,12 @@
 import * as React from "react"
 import { ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { inject, observer } from "mobx-react"
 
 import { Text } from "src/views/shared/text"
 import { EntryGroupProps } from "./entry-group.props"
 import { color, spacing } from "src/theme"
 import { Icon } from "src/views/shared/icon"
+import { formatDate } from "src/lib/utility"
 
 const LOG_ENTRY_DATE: TextStyle = {
   paddingLeft: spacing[4],
@@ -45,52 +47,74 @@ const LOG_ENTRY_TIME: ViewStyle = {
   alignItems: "center",
 }
 
-/**
- * Stateless functional component for your needs
- *
- * Component description here for TypeScript tips.
- */
-export function EntryGroup(props: EntryGroupProps) {
-  const renderAnimalImage = animalType => {
-    switch (animalType) {
-      case "cow":
-        return <Icon icon={"cow"} />
-      case "porc":
-        return <Icon icon={"porc"} />
-      case "duck":
-        return <Icon icon={"duck"} />
-      case "horse":
-        return <Icon icon={"horse"} />
-      case "lamb":
-        return <Icon icon={"lamb"} />
-      default:
-        return <Icon icon={"cow"} />
+@inject("navigationStore")
+@inject("userStore")
+@observer
+export class EntryGroup extends React.Component<EntryGroupProps, {}> {
+  render() {
+    const renderAnimalImage = animalType => {
+      switch (animalType) {
+        case "cow":
+          return <Icon icon={"cow"} style={{ height: 38 }} />
+        case "porc":
+          return <Icon icon={"porc"} style={{ height: 38 }} />
+        case "duck":
+          return <Icon icon={"duck"} style={{ height: 38 }} />
+        case "horse":
+          return <Icon icon={"horse"} style={{ height: 38 }} />
+        case "lamb":
+          return <Icon icon={"lamb"} style={{ height: 38 }} />
+        case "bear":
+          return <Icon icon={"bear"} style={{ height: 38 }} />
+        case "buffalo":
+          return <Icon icon={"buffalo"} style={{ height: 38 }} />
+        case "chicken":
+          return <Icon icon={"chicken"} style={{ height: 38 }} />
+        case "fish":
+          return <Icon icon={"fish"} style={{ height: 38 }} />
+        case "kangaroo":
+          return <Icon icon={"kangaroo"} style={{ height: 38 }} />
+        case "shellfish":
+          return <Icon icon={"shrimp"} style={{ height: 38 }} />
+        case "turkey":
+          return <Icon icon={"turkey"} style={{ height: 38 }} />
+        default:
+          return <Icon icon={"cow"} style={{ height: 38 }} />
+      }
     }
-  }
 
-  return (
-    <View>
-      <Text style={LOG_ENTRY_DATE} preset="header">
-        {props.date}
-      </Text>
-      {/* TODO: Use a unique ID instead of the index. There could be problems
-      with relying on the index once the ability to delete entries is added */}
-      {props.entries.map((entry, index) => (
-        <TouchableOpacity
-          style={[LOG_ENTRY, index > 0 && LOG_ENTRY_WITH_OFFSET]}
-          key={index}
-          onPress={() => null}
-        >
-          <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.animalType)}</View>
-          <View style={LOG_ENTRY_DETAILS}>
-            <Text preset="fieldLabel">{entry.name}</Text>
-            <Text style={LOG_ENTRY_DETAILS_WEIGHT}>{entry.weight}</Text>
-          </View>
-          <View style={LOG_ENTRY_TIME}>
-            <Text preset="fieldLabel">{entry.time}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  )
+    const computeWeight = entry => {
+      if (this.props.userStore.weightUnits === "kgs") {
+        return `${entry.weightKgs} kgs`
+      } else {
+        return `${entry.weightLbs} lbs`
+      }
+    }
+
+    return (
+      <View>
+        <Text style={LOG_ENTRY_DATE} preset="header">
+          {formatDate(this.props.date)}
+        </Text>
+        {/* TODO: Use a unique ID instead of the index. There could be problems
+        with relying on the index once the ability to delete entries is added */}
+        {this.props.entries.map((entry, index) => (
+          <TouchableOpacity
+            style={[LOG_ENTRY, index > 0 && LOG_ENTRY_WITH_OFFSET]}
+            key={index}
+            onPress={() => this.props.navigationStore.navigateToEditEntry(entry)}
+          >
+            <View style={LOG_ENTRY_IMAGE}>{renderAnimalImage(entry.animalType)}</View>
+            <View style={LOG_ENTRY_DETAILS}>
+              <Text preset="fieldLabel">{entry.name}</Text>
+              <Text style={LOG_ENTRY_DETAILS_WEIGHT}>{computeWeight(entry)}</Text>
+            </View>
+            <View style={LOG_ENTRY_TIME}>
+              <Text preset="fieldLabel">{entry.time}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+    )
+  }
 }
