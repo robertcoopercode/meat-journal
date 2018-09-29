@@ -2,6 +2,7 @@ import { ViewStyle, TouchableOpacityProperties } from "react-native"
 import { EntryGroupPresetNames } from "./entry-group.presets"
 import { UserStoreModel } from "src/models/user-store"
 import { NavigationStore } from "src/navigation/navigation-store"
+import { Entry } from "src/models/entry-store"
 export interface EntryGroupProps extends TouchableOpacityProperties {
   /**
    * An optional style override useful for padding & margin.
@@ -14,12 +15,7 @@ export interface EntryGroupProps extends TouchableOpacityProperties {
   preset?: EntryGroupPresetNames
 
   date: string
-  entries: {
-    animalType: string
-    name: string
-    weight: string
-    time: string
-  }[]
+  entries: (typeof Entry.Type)[]
   userStore?: typeof UserStoreModel.Type
   navigationStore?: NavigationStore
 }

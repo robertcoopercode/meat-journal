@@ -4,7 +4,7 @@ import isBefore from "date-fns/is_before"
 import { createJSDate } from "src/lib/utility"
 import { dashedDateFormatConversion } from "src/lib/utility"
 
-const Entry = types.model("Entry", {
+export const Entry = types.model("Entry", {
   id: types.string,
   animalType: types.string,
   name: types.string,
