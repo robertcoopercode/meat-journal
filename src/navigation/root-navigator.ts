@@ -1,6 +1,6 @@
 import { createStackNavigator, createBottomTabNavigator } from "react-navigation"
 
-import { AddEntryModal } from "src/views/screens/add-entry-modal"
+import { EntryModal } from "src/views/screens/entry-modal"
 import { LogbookCalendar } from "src/views/screens/logbook-calendar"
 import { LogbookHeader } from "src/navigation/logbook-header"
 import { LogbookIcon, StatisticsIcon } from "./tab-navigation-icons"
@@ -76,7 +76,7 @@ export const RootNavigator = createStackNavigator(
   {
     welcome: { screen: Welcome },
     mainTabNavigation: { screen: MainTabNavigator },
-    addEntryModal: { screen: AddEntryModal },
+    entryModal: { screen: EntryModal },
   },
   {
     headerMode: "none",

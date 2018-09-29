@@ -1,13 +1,13 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import {
-  Image,
   SafeAreaView,
   TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
   ScrollView,
+  Dimensions,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
@@ -28,6 +28,7 @@ const ROOT: ViewStyle = {
 }
 
 const EXIT: ViewStyle = {
+  marginTop: 100,
   marginBottom: spacing[3],
 }
 
@@ -37,6 +38,11 @@ const MODAL: ViewStyle = {
   backgroundColor: color.background,
   borderTopLeftRadius: 5,
   borderTopRightRadius: 5,
+}
+
+const MODAL_BODY_CONTAINER = {
+  maxHeight: Dimensions.get("window").height - 100,
+  flexGrow: 0,
 }
 
 const MODAL_FORM_BODY: ViewStyle = {
@@ -60,11 +66,11 @@ const MODAL_FORM_SUBMIT: ViewStyle = {
   alignSelf: "center",
 }
 
-export interface AddEntryModalScreenProps extends NavigationScreenProps<{}> {
+export interface EntryModalScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
 }
 
-interface AddEntryModalScreenState {
+interface EntryModalScreenState {
   animalType: string
   animalFieldFocused: boolean
   date: string
@@ -78,10 +84,7 @@ interface AddEntryModalScreenState {
 
 @inject("entryStore")
 @observer
-export class AddEntryModal extends React.Component<
-  AddEntryModalScreenProps,
-  AddEntryModalScreenState
-> {
+export class EntryModal extends React.Component<EntryModalScreenProps, EntryModalScreenState> {
   // Class properties Type definitions
   inputs: {
     animalType: any
@@ -190,101 +193,104 @@ export class AddEntryModal extends React.Component<
     ))
   }
   render() {
+    const addingEntry = this.props.navigation.getParam("type", "add") === "add"
     return (
       <Screen style={ROOT} preset="fixedStack">
         <TouchableOpacity style={EXIT} onPress={() => this.props.navigation.goBack()}>
           <Icon icon="exit" />
         </TouchableOpacity>
         <View style={MODAL}>
-          <SafeAreaView>
-            <View>
-              <View style={MODAL_FORM_HEADER}>
-                <Text style={MODAL_FORM_HEADER_TEXT} uppercase tx={"entryModal.addEntry"} />
-              </View>
-              <KeyboardAwareScrollView
-                keyboardShouldPersistTaps={"always"}
-                innerRef={ref => {
-                  this.scroll = ref
-                }}
-              >
-                <View style={MODAL_FORM_BODY}>
-                  <TextField
-                    labelTx={"entryModal.nameField"}
-                    setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
-                    // focus on the next input after pressing "next" on the keyboard
-                    autoCapitalize={"none"}
-                    onChangeText={text => this.setState({ name: text })}
-                  />
-                  {/* Make a custom dropdown here instead */}
-                  <TextField
-                    onFocus={this.handleAnimalFieldFocus}
-                    onBlur={this.handleAnimalFieldBlur}
-                    labelTx={"entryModal.animalField"}
-                    setRef={this.setInputRef("animalType")}
-                    autoCapitalize={"none"}
-                    value={this.state.animalType}
-                    onChangeText={this.handleAnimalFieldChange}
-                    style={{ zIndex: 2 }} // zIndex required to appear above dropdown
-                  />
-                  {this.state.animalFieldFocused && (
-                    <View style={{ overflow: "visible", zIndex: 1 }}>
-                      <ScrollView
-                        keyboardShouldPersistTaps={"always"}
-                        style={{
-                          maxHeight: 185,
-                          position: "absolute",
-                          width: "100%",
-                          backgroundColor: "white",
-                          borderBottomLeftRadius: 5,
-                          borderBottomRightRadius: 5,
-                          borderColor: color.palette.paleFlower,
-                          borderWidth: 1,
-                          borderTopWidth: 0,
-                          paddingTop: spacing[2],
-                          marginTop: -spacing[3] - spacing[2],
-                        }}
-                      >
-                        {this.renderFilteredAnimalTypes()}
-                      </ScrollView>
-                    </View>
-                  )}
-                  <TextField
-                    labelTx={"entryModal.weightField"}
-                    setRef={this.setInputRef("weight")}
-                    keyboardType={"numeric"}
-                    value={this.state.weight}
-                    onChangeText={this.handleWeightFieldChange}
-                  />
-                  <DatePicker
-                    setRef={this.setInputRef("date")}
-                    labelTx={"entryModal.dateField"}
-                    type="date"
-                    date={this.state.date}
-                    onOpenModal={() => this.setState({ openedDatePicker: true })}
-                    onCloseModal={this.handleDateClose}
-                    onDateChange={date => this.setState({ date: date })}
-                    isOpened={this.state.openedDatePicker}
-                    format={"DD/MM/YYYY"}
-                  />
-                  <DatePicker
-                    setRef={this.setInputRef("time")}
-                    labelTx={"entryModal.timeField"}
-                    type="time"
-                    time={this.state.time}
-                    onOpenModal={() => this.setState({ openedTimePicker: true })}
-                    onCloseModal={() => this.setState({ openedTimePicker: false })}
-                    onDateChange={time => this.setState({ time: time })}
-                    isOpened={this.state.openedTimePicker}
-                    format={"h:mm A"}
-                  />
-                  <Button
-                    style={MODAL_FORM_SUBMIT}
-                    tx={"entryModal.addButton"}
-                    onPress={this.handleSubmit}
-                  />
-                </View>
-              </KeyboardAwareScrollView>
+          <SafeAreaView style={MODAL_BODY_CONTAINER}>
+            <View style={MODAL_FORM_HEADER}>
+              <Text
+                style={MODAL_FORM_HEADER_TEXT}
+                uppercase
+                tx={addingEntry ? "entryModal.addEntry" : "entryModal.editEntry"}
+              />
             </View>
+            <KeyboardAwareScrollView
+              keyboardShouldPersistTaps={"always"}
+              innerRef={ref => {
+                this.scroll = ref
+              }}
+            >
+              <View style={MODAL_FORM_BODY}>
+                <TextField
+                  labelTx={"entryModal.nameField"}
+                  setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
+                  // focus on the next input after pressing "next" on the keyboard
+                  autoCapitalize={"none"}
+                  onChangeText={text => this.setState({ name: text })}
+                />
+                {/* Make a custom dropdown here instead */}
+                <TextField
+                  onFocus={this.handleAnimalFieldFocus}
+                  onBlur={this.handleAnimalFieldBlur}
+                  labelTx={"entryModal.animalField"}
+                  setRef={this.setInputRef("animalType")}
+                  autoCapitalize={"none"}
+                  value={this.state.animalType}
+                  onChangeText={this.handleAnimalFieldChange}
+                  style={{ zIndex: 2 }} // zIndex required to appear above dropdown
+                />
+                {this.state.animalFieldFocused && (
+                  <View style={{ overflow: "visible", zIndex: 1 }}>
+                    <ScrollView
+                      keyboardShouldPersistTaps={"always"}
+                      style={{
+                        maxHeight: 185,
+                        position: "absolute",
+                        width: "100%",
+                        backgroundColor: "white",
+                        borderBottomLeftRadius: 5,
+                        borderBottomRightRadius: 5,
+                        borderColor: color.palette.paleFlower,
+                        borderWidth: 1,
+                        borderTopWidth: 0,
+                        paddingTop: spacing[2],
+                        marginTop: -spacing[3] - spacing[2],
+                      }}
+                    >
+                      {this.renderFilteredAnimalTypes()}
+                    </ScrollView>
+                  </View>
+                )}
+                <TextField
+                  labelTx={"entryModal.weightField"}
+                  setRef={this.setInputRef("weight")}
+                  keyboardType={"numeric"}
+                  value={this.state.weight}
+                  onChangeText={this.handleWeightFieldChange}
+                />
+                <DatePicker
+                  setRef={this.setInputRef("date")}
+                  labelTx={"entryModal.dateField"}
+                  type="date"
+                  date={this.state.date}
+                  onOpenModal={() => this.setState({ openedDatePicker: true })}
+                  onCloseModal={this.handleDateClose}
+                  onDateChange={date => this.setState({ date: date })}
+                  isOpened={this.state.openedDatePicker}
+                  format={"DD/MM/YYYY"}
+                />
+                <DatePicker
+                  setRef={this.setInputRef("time")}
+                  labelTx={"entryModal.timeField"}
+                  type="time"
+                  time={this.state.time}
+                  onOpenModal={() => this.setState({ openedTimePicker: true })}
+                  onCloseModal={() => this.setState({ openedTimePicker: false })}
+                  onDateChange={time => this.setState({ time: time })}
+                  isOpened={this.state.openedTimePicker}
+                  format={"h:mm A"}
+                />
+                <Button
+                  style={MODAL_FORM_SUBMIT}
+                  tx={addingEntry ? "entryModal.addButton" : "entryModal.saveButton"}
+                  onPress={this.handleSubmit}
+                />
+              </View>
+            </KeyboardAwareScrollView>
           </SafeAreaView>
         </View>
       </Screen>

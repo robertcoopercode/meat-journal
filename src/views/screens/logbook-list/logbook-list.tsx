@@ -7,7 +7,6 @@ import { AddEntryButton } from "src/views/shared/add-entry-button"
 import { EntryGroup } from "src/views/shared/entry-group"
 import { Screen } from "src/views/shared/screen"
 import { color } from "src/theme"
-import { formatDate } from "src/lib/utility"
 import { EntryStoreModel } from "src/models/entry-store"
 
 export interface LogbookListScreenProps extends NavigationScreenProps<{}> {
@@ -33,7 +32,7 @@ export class LogbookList extends React.Component<LogbookListScreenProps, {}> {
       return (
         <EntryGroup
           key={entryGroup.date}
-          date={formatDate(entryGroup.date)}
+          date={entryGroup.date}
           entries={entryGroup.data.map(entry => {
             return this.cleanData(entry)
           })}

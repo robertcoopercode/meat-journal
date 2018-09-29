@@ -33,11 +33,13 @@
   },
   "entryModal": {
     "addEntry": "Add Entry",
+    "editEntry": "Edit Entry",
     "nameField": "Name",
     "animalField": "Animal",
     "weightField": "Weight",
     "dateField": "Date (DD-MM-YYYY)",
     "timeField": "Time",
-    "addButton": "Add"
+    "addButton": "Add",
+    "saveButton": "Save"
   }
 }

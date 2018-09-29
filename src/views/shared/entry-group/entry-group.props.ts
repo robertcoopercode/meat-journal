@@ -1,6 +1,7 @@
 import { ViewStyle, TouchableOpacityProperties } from "react-native"
 import { EntryGroupPresetNames } from "./entry-group.presets"
-
+import { UserStoreModel } from "src/models/user-store"
+import { NavigationStore } from "src/navigation/navigation-store"
 export interface EntryGroupProps extends TouchableOpacityProperties {
   /**
    * An optional style override useful for padding & margin.
@@ -19,4 +20,6 @@ export interface EntryGroupProps extends TouchableOpacityProperties {
     weight: string
     time: string
   }[]
+  userStore?: typeof UserStoreModel.Type
+  navigationStore?: NavigationStore
 }
