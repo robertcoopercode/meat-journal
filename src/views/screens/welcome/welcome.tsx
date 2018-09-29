@@ -1,14 +1,12 @@
 import * as React from "react"
-import { observer } from "mobx-react"
-import { Image, ViewStyle, TextStyle } from "react-native"
+import { Image, ViewStyle, TextStyle, ImageStyle } from "react-native"
 import { NavigationScreenProps } from "react-navigation"
+import { observer } from "mobx-react"
 
-import { Text } from "src/views/shared/text"
 import { Button } from "src/views/shared/button"
 import { Screen } from "src/views/shared/screen"
+import { Text } from "src/views/shared/text"
 import { color, spacing } from "src/theme"
-
-export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
 
 const ROOT: ViewStyle = {
   backgroundColor: color.secondary,
@@ -23,13 +21,13 @@ const HEADER: TextStyle = {
   color: color.primary,
 }
 
-const LOGO = {
+const LOGO: ImageStyle = {
   width: 192,
   height: 192,
   paddingBottom: spacing[3],
 }
 
-const DESCRIPTION = {
+const DESCRIPTION: TextStyle = {
   paddingBottom: spacing[5],
   paddingHorizontal: spacing[4],
   textAlign: "center",
@@ -37,6 +35,8 @@ const DESCRIPTION = {
   letterSpacing: 0.5,
   fontWeight: "300",
 }
+
+export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
 
 // @inject("mobxstuff")
 @observer
