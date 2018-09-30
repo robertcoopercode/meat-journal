@@ -2,12 +2,12 @@ import * as React from "react"
 import { ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { inject, observer } from "mobx-react"
 
-import { Text } from "src/views/shared/text"
 import { EntryGroupProps } from "./entry-group.props"
-import { color, spacing } from "src/theme"
 import { Icon } from "src/views/shared/icon"
-import { formatDate } from "src/lib/utility"
 import { SUPPORTED_ANIMALS, supportedAnimalsTypes } from "src/lib/constants"
+import { Text } from "src/views/shared/text"
+import { color, spacing } from "src/theme"
+import { formatDate } from "src/lib/utility"
 
 const LOG_ENTRY_DATE: TextStyle = {
   paddingLeft: spacing[4],
