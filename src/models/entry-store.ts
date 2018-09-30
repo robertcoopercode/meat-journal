@@ -35,6 +35,10 @@ const DateEntry = types
         weightKgs: parseFloat(entry.weight),
       })
     },
+    deleteEntry(id) {
+      console.tron.log("Deleting individual entry")
+      self.data = self.data.filter(item => item.id !== id)
+    },
   }))
 
 export const EntryStoreModel = types
@@ -71,6 +75,19 @@ export const EntryStoreModel = types
       }
       self.entries = self.entries.sort(sortDateEntryArray)
       return
+    },
+    delete(entry) {
+      console.tron.log("Looking for entries to delete")
+      self.entries.some(storeDateEntry => {
+        console.tron.log(storeDateEntry.date, entry.date)
+        if (storeDateEntry.date === entry.date) {
+          console.tron.log("Found entry to delete")
+          storeDateEntry.deleteEntry(entry.id)
+          return true
+        }
+        return false
+      })
+      self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
     },
     selectDay(day) {
       const selectedDate = convertDashedDateToSlashedDate(day.dateString)

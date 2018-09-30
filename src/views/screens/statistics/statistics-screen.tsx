@@ -9,7 +9,7 @@ import { NavigationScreenProps } from "react-navigation"
 export interface StatisticsScreenProps extends NavigationScreenProps<{}> {}
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
 }
 
 // @inject("mobxstuff")

@@ -10,7 +10,9 @@ import {
   Dimensions,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import format from "date-fns/format"
 
+import { SUPPORTED_ANIMALS } from "src/lib/constants"
 import { Button } from "src/views/shared/button"
 import { DatePicker } from "src/views/shared/date-picker"
 import { EntryStoreModel } from "src/models/entry-store"
@@ -20,6 +22,7 @@ import { Text } from "src/views/shared/text"
 import { TextField } from "src/views/shared/text-field"
 import { color, spacing } from "src/theme"
 import { Icon } from "src/views/shared/icon"
+import { UserStoreModel } from "src/models/user-store"
 
 const ROOT: ViewStyle = {
   backgroundColor: "rgba(0,0,0, 0.6)",
@@ -54,11 +57,13 @@ const MODAL_FORM_HEADER: ViewStyle = {
   padding: spacing[3],
   borderTopLeftRadius: 5,
   borderTopRightRadius: 5,
+  flexDirection: "row",
 }
 
 const MODAL_FORM_HEADER_TEXT: TextStyle = {
   fontWeight: "600",
   color: color.secondary,
+  flexGrow: 1,
 }
 
 const MODAL_FORM_SUBMIT: ViewStyle = {
@@ -66,8 +71,11 @@ const MODAL_FORM_SUBMIT: ViewStyle = {
   alignSelf: "center",
 }
 
+const DELETE_ICON: ViewStyle = {}
+
 export interface EntryModalScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
+  userStore: typeof UserStoreModel.Type
 }
 
 interface EntryModalScreenState {
@@ -82,6 +90,7 @@ interface EntryModalScreenState {
   filteredAnimalTypes: string[]
 }
 
+@inject("userStore")
 @inject("entryStore")
 @observer
 export class EntryModal extends React.Component<EntryModalScreenProps, EntryModalScreenState> {
@@ -96,18 +105,16 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
 
   scroll: any
 
-  animalTypes = ["cow", "porc", "duck", "horse", "lamb"]
-
   state = {
     animalType: "",
     animalFieldFocused: false,
-    date: "16/09/2018",
+    date: format(new Date(), "DD/MM/YYYY"),
     name: "",
     openedDatePicker: false,
     openedTimePicker: false,
-    time: "10:00 PM",
+    time: format(new Date(), "h:mm A"),
     weight: null,
-    filteredAnimalTypes: this.animalTypes,
+    filteredAnimalTypes: SUPPORTED_ANIMALS,
   }
 
   static navigationOptions = {}
@@ -123,6 +130,18 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
       weight: null,
     }
   }
+  componentDidMount() {
+    if (this.props.navigation.getParam("type", "add") === "edit") {
+      const { name, animalType, date, time } = this.props.navigation.state.params.entry
+      let weight
+      if (this.props.userStore.weightUnits === "kgs") {
+        weight = this.props.navigation.state.params.entry.weightKgs.toString()
+      } else {
+        weight = this.props.navigation.state.params.entry.weightLbs.toString()
+      }
+      this.setState({ name, animalType, date, time, weight })
+    }
+  }
   setInputRef = inputName => input => {
     this.inputs[inputName] = input
   }
@@ -133,6 +152,11 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({ openedDatePicker: false })
     // Open the time picker after the date picker closes
     // setTimeout(this.inputs.time.onPressDate, 500)
+  }
+  handleDeleteEntry = () => {
+    console.tron.log("Deleting Entry")
+    this.props.entryStore.delete(this.props.navigation.state.params.entry)
+    this.props.navigation.goBack()
   }
   handleSubmit = () => {
     const entry = {
@@ -152,12 +176,10 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({ animalFieldFocused: false })
   }
   handleAnimalFieldChange = text => {
-    this.setState(state => {
-      const filteredAnimalTypes = this.animalTypes.filter(animalType => animalType.includes(text))
-      return {
-        filteredAnimalTypes,
-        animalType: text,
-      }
+    const filteredAnimalTypes = SUPPORTED_ANIMALS.filter(animalType => animalType.includes(text))
+    this.setState({
+      filteredAnimalTypes,
+      animalType: text,
     })
   }
   handleAnimalFieldSelect = animalType => {
@@ -166,7 +188,6 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
   }
   handleWeightFieldChange = text => {
     let parsedNumber = parseFloat(text)
-    console.tron.log(text)
     if (isNaN(text)) {
       this.setState(state => ({
         weight: state.weight,
@@ -206,6 +227,11 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
                 uppercase
                 tx={addingEntry ? "entryModal.addEntry" : "entryModal.editEntry"}
               />
+              {!addingEntry && (
+                <TouchableOpacity onPress={this.handleDeleteEntry}>
+                  <Icon icon={"delete"} style={DELETE_ICON} />
+                </TouchableOpacity>
+              )}
             </View>
             <KeyboardAwareScrollView
               keyboardShouldPersistTaps={"always"}
@@ -219,6 +245,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
                   setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
                   // focus on the next input after pressing "next" on the keyboard
                   autoCapitalize={"none"}
+                  value={this.state.name}
                   onChangeText={text => this.setState({ name: text })}
                 />
                 {/* Make a custom dropdown here instead */}
