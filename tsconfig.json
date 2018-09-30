@@ -13,6 +13,7 @@
     "sourceMap": true,
     "target": "es2015",
     "baseUrl": "./src",
+    "lib": ["dom", "es7"],
     "paths": {
       "src/*": ["*"]
     }

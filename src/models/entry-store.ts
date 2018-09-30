@@ -28,7 +28,7 @@ const DateEntry = types
         id: uniqueId(),
         animalType: entry.animalType,
         name: entry.name,
-        dateTimestamp: 10, // TODO
+        dateTimestamp: new Date(),
         date: entry.date,
         time: entry.time,
         weightLbs: parseFloat(entry.weight),
@@ -59,7 +59,7 @@ export const EntryStoreModel = types
                 id: uniqueId(),
                 animalType: entry.animalType,
                 name: entry.name,
-                dateTimestamp: 10, // TODO
+                dateTimestamp: new Date(),
                 date: entry.date,
                 time: entry.time,
                 weightLbs: parseFloat(entry.weight),

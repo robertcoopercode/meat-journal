@@ -2,10 +2,10 @@ export const icons = {
   back: require("./arrow-left.png"),
   bullet: require("./bullet.png"),
   cow: require("./cow.png"),
-  porc: require("./pig.png"),
+  porc: require("./porc.png"),
   duck: require("./duck.png"),
   horse: require("./horse.png"),
-  lamb: require("./sheep.png"),
+  lamb: require("./lamb.png"),
   addEntryButton: require("./addEntryButton.png"),
   exit: require("./Exit.png"),
   bear: require("./bear.png"),
@@ -13,7 +13,7 @@ export const icons = {
   chicken: require("./chicken.png"),
   fish: require("./fish.png"),
   kangaroo: require("./kangaroo.png"),
-  shrimp: require("./shrimp.png"),
+  shellfish: require("./shellfish.png"),
   turkey: require("./turkey.png"),
 }
 
