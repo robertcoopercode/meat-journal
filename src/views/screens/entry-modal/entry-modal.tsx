@@ -135,7 +135,6 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     // setTimeout(this.inputs.time.onPressDate, 500)
   }
   handleSubmit = () => {
-    // MOBX
     const entry = {
       animalType: this.state.animalType,
       name: this.state.name,
