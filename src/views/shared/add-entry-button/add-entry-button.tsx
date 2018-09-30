@@ -13,9 +13,11 @@ export interface AddEntryButtonProps extends NavigationScreenProps<{}> {
   navigationStore: NavigationStore
 }
 
+export const ADD_ENTRY_CONTAINER_HEIGHT = 75
+
 const ADD_ENTRY_CONTAINER: ViewStyle = {
   position: "absolute",
-  height: 75,
+  height: ADD_ENTRY_CONTAINER_HEIGHT,
   bottom: 0,
   width: "100%",
   alignItems: "flex-end",

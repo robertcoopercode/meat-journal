@@ -23,6 +23,7 @@ export const MOCK_ENTRIES = [
         date: "16/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "26/09/2018",
@@ -48,6 +49,7 @@ export const MOCK_ENTRIES = [
         date: "15/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "25/09/2018",
@@ -73,6 +75,7 @@ export const MOCK_ENTRIES = [
         date: "14/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "23/09/2018",
@@ -98,6 +101,7 @@ export const MOCK_ENTRIES = [
         date: "13/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "21/09/2018",
@@ -123,6 +127,7 @@ export const MOCK_ENTRIES = [
         date: "12/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "18/09/2018",
@@ -148,6 +153,7 @@ export const MOCK_ENTRIES = [
         date: "11/09/2018",
       },
     ],
+    selected: false,
   },
   {
     date: "15/09/2018",
@@ -173,5 +179,6 @@ export const MOCK_ENTRIES = [
         date: "10/09/2018",
       },
     ],
+    selected: false,
   },
 ]

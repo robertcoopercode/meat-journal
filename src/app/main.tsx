@@ -8,6 +8,7 @@ import { StorybookUIRoot } from "../../storybook"
 
 // Ignore lame ass warnings that appear for no understandable reason
 YellowBox.ignoreWarnings([
+  'Warning: "Provider": It is not recommended to assign props directly to state',
   "Warning: isMounted(...) is deprecated",
   "Module RCTImageLoader",
   "Sending `onAnimatedValueUpdate` with no listeners registered.",

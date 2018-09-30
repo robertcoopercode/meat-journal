@@ -4,6 +4,7 @@ import { Environment } from "./environment"
 import * as storage from "../lib/storage"
 import { Reactotron } from "../services/reactotron"
 import { Api } from "../services/api"
+import { persistAsyncStore } from "src/app/environment-variables"
 
 /**
  * The key we'll be saving our state as within async storage.
@@ -22,7 +23,11 @@ export async function setupRootStore() {
   try {
     // load data from storage
     data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
-    rootStore = RootStoreModel.create(data, env)
+    if (persistAsyncStore) {
+      rootStore = RootStoreModel.create(data, env)
+    } else {
+      rootStore = RootStoreModel.create({}, env) // Use this if you want to clear async storage
+    }
   } catch {
     // if there's any problems loading, then let's at least fallback to an empty state
     // instead of crashing.
