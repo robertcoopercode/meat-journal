@@ -23,3 +23,7 @@ export const createJSDate = unformattedDate => {
 export const dashedDateFormatConversion = date => {
   return format(createJSDate(date), "YYYY-MM-DD")
 }
+
+export const convertDashedDateToSlashedDate = dashedDate => {
+  return format(dashedDate, "DD/MM/YYYY")
+}

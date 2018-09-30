@@ -2,7 +2,8 @@ import { types } from "mobx-state-tree"
 import { uniqueId } from "src/lib/utility"
 import isBefore from "date-fns/is_before"
 import { createJSDate } from "src/lib/utility"
-import { dashedDateFormatConversion } from "src/lib/utility"
+import { convertDashedDateToSlashedDate, dashedDateFormatConversion } from "src/lib/utility"
+import format from "date-fns/format"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -19,6 +20,7 @@ const DateEntry = types
   .model("DateEntry", {
     date: types.string,
     data: types.array(Entry),
+    selected: types.boolean,
   })
   .actions(self => ({
     addEntry(entry) {
@@ -38,6 +40,7 @@ const DateEntry = types
 export const EntryStoreModel = types
   .model("EntryStore", {
     entries: types.optional(types.array(DateEntry), []),
+    selectedDate: types.string,
   })
   .actions(self => ({
     add(entry) {
@@ -48,24 +51,43 @@ export const EntryStoreModel = types
         }
       })
       if (!dateAllreadyExists) {
-        self.entries.push({
-          date: entry.date,
-          data: [
-            {
-              id: uniqueId(),
-              animalType: entry.animalType,
-              name: entry.name,
-              dateTimestamp: 10, // TODO
-              date: entry.date,
-              time: entry.time,
-              weightLbs: parseFloat(entry.weight),
-              weightKgs: parseFloat(entry.weight),
-            },
-          ],
-        })
+        self.entries.push(
+          DateEntry.create({
+            date: entry.date,
+            data: [
+              {
+                id: uniqueId(),
+                animalType: entry.animalType,
+                name: entry.name,
+                dateTimestamp: 10, // TODO
+                date: entry.date,
+                time: entry.time,
+                weightLbs: parseFloat(entry.weight),
+                weightKgs: parseFloat(entry.weight),
+              },
+            ],
+          }),
+        )
       }
       self.entries = self.entries.sort(sortDateEntryArray)
       return
+    },
+    selectDay(day) {
+      const selectedDate = convertDashedDateToSlashedDate(day.dateString)
+      self.entries.forEach(entry => {
+        if (entry.date !== selectedDate) {
+          entry.selected = false
+        } else {
+          entry.selected = true
+        }
+        return entry
+      })
+      self.selectedDate = day.dateString
+      return
+    },
+    resetSelectedDay() {
+      self.selectedDate = format(Date.now(), "YYYY-MM-DD")
+      self.entries.forEach(entry => (entry.selected = false))
     },
   }))
   .views(self => ({

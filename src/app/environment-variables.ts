@@ -28,3 +28,7 @@ declare var process: any
  * An example importing an environment variable.
  */
 export const API: string | undefined = process.env.API
+
+export const persistAsyncStore = true
+
+export const alwaysDisplayWelcomeScreen = false
