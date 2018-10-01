@@ -5,7 +5,7 @@ export const UserStoreModel = types
     weightUnits: types.union(types.literal("lbs"), types.literal("kgs")),
   })
   .actions(self => ({
-    updateWeightUnits(units) {
+    updateWeightUnits(units: "lbs" | "kgs") {
       return (self.weightUnits = units)
     },
   }))

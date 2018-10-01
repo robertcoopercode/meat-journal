@@ -2,11 +2,12 @@ import { createStackNavigator, createBottomTabNavigator } from "react-navigation
 
 import { EntryModal } from "src/views/screens/entry-modal"
 import { LogbookCalendar } from "src/views/screens/logbook-calendar"
-import { LogbookHeader } from "src/navigation/logbook-header"
+import { LogbookHeader, StatisticsHeader, SettingsHeader } from "./custom-header"
 import { LogbookIcon, StatisticsIcon } from "./tab-navigation-icons"
 import { LogbookList } from "src/views/screens/logbook-list"
 import { Statistics } from "src/views/screens/statistics"
 import { Welcome } from "src/views/screens/welcome"
+import { Settings } from "src/views/screens/settings"
 import { color } from "src/theme/color"
 
 // Use this to view the screens that came with the boilerplate
@@ -24,6 +25,19 @@ const LogbookNavigator = createStackNavigator(
   },
 )
 
+const StatisticsNavigator = createStackNavigator(
+  {
+    statisticsWeekly: { screen: Statistics },
+    statisticsMonthly: { screen: Statistics },
+    statisticsYearly: { screen: Statistics },
+  },
+  {
+    navigationOptions: {
+      header: StatisticsHeader,
+    },
+  },
+)
+
 const MainTabNavigator = createBottomTabNavigator(
   {
     logbook: {
@@ -34,7 +48,7 @@ const MainTabNavigator = createBottomTabNavigator(
       },
     },
     statistics: {
-      screen: Statistics,
+      screen: StatisticsNavigator,
       navigationOptions: { title: "STATISTICS", tabBarIcon: StatisticsIcon },
     },
   },
@@ -72,11 +86,26 @@ function forVertical(props) {
   }
 }
 
+const SettingsNavigator = createStackNavigator(
+  {
+    settings: { screen: Settings, mode: "card" },
+  },
+  {
+    mode: "card",
+    navigationOptions: {
+      header: SettingsHeader,
+    },
+  },
+)
+
 export const RootNavigator = createStackNavigator(
   {
     welcome: { screen: Welcome },
     mainTabNavigation: { screen: MainTabNavigator },
     entryModal: { screen: EntryModal },
+    settings: {
+      screen: SettingsNavigator,
+    },
   },
   {
     headerMode: "none",
