@@ -61,7 +61,6 @@ const MODAL_FORM_HEADER: ViewStyle = {
 }
 
 const MODAL_FORM_HEADER_TEXT: TextStyle = {
-  fontWeight: "600",
   color: color.secondary,
   flexGrow: 1,
 }
@@ -225,6 +224,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
               <Text
                 style={MODAL_FORM_HEADER_TEXT}
                 uppercase
+                preset="header"
                 tx={addingEntry ? "entryModal.addEntry" : "entryModal.editEntry"}
               />
               {!addingEntry && (

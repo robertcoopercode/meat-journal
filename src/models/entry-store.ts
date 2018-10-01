@@ -1,9 +1,16 @@
 import { types } from "mobx-state-tree"
-import { uniqueId } from "src/lib/utility"
 import isBefore from "date-fns/is_before"
-import { createJSDate } from "src/lib/utility"
-import { convertDashedDateToSlashedDate, dashedDateFormatConversion } from "src/lib/utility"
+import {
+  createJSDate,
+  uniqueId,
+  getStartOfWeek,
+  convertDashedDateToSlashedDate,
+  dashedDateFormatConversion,
+  isSameWeek,
+  addWeek,
+} from "src/lib/utility"
 import format from "date-fns/format"
+import differenceInWeeks from "date-fns/difference_in_weeks"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -28,7 +35,7 @@ const DateEntry = types
         id: uniqueId(),
         animalType: entry.animalType,
         name: entry.name,
-        dateTimestamp: new Date(),
+        dateTimestamp: Date.now(),
         date: entry.date,
         time: entry.time,
         weightLbs: parseFloat(entry.weight),
@@ -63,13 +70,14 @@ export const EntryStoreModel = types
                 id: uniqueId(),
                 animalType: entry.animalType,
                 name: entry.name,
-                dateTimestamp: new Date(),
+                dateTimestamp: Date.now(),
                 date: entry.date,
                 time: entry.time,
                 weightLbs: parseFloat(entry.weight),
                 weightKgs: parseFloat(entry.weight),
               },
             ],
+            selected: false,
           }),
         )
       }
@@ -111,10 +119,43 @@ export const EntryStoreModel = types
     getDateEntries(date) {
       return self.entries.filter(entry => dashedDateFormatConversion(entry.date) === date)
     },
+    getWeeklyStats() {
+      const weekStats = [{}]
+      let startOfWeek = getStartOfWeek(new Date())
+      self.entries.forEach(entry => {
+        let entryAdded = false
+        while (weekStats.length < 30 && !entryAdded) {
+          if (isSameWeek(startOfWeek, createJSDate(entry.date))) {
+            const currentWeekIndex = Math.abs(
+              differenceInWeeks(startOfWeek, getStartOfWeek(new Date())),
+            )
+            if (weekStats[currentWeekIndex]) {
+              entry.data.forEach(item => {
+                if (weekStats[currentWeekIndex][item.animalType]) {
+                  weekStats[currentWeekIndex][item.animalType] =
+                    weekStats[currentWeekIndex][item.animalType] + item.weightKgs
+                } else {
+                  weekStats[currentWeekIndex][item.animalType] = item.weightKgs
+                }
+              })
+            }
+            entryAdded = true
+          } else {
+            startOfWeek = setNewStartOfWeek(startOfWeek)
+            weekStats.push({})
+          }
+        }
+      })
+      return weekStats
+      function setNewStartOfWeek(previousWeekStartDate) {
+        return addWeek(previousWeekStartDate, -1)
+      }
+    },
+    // getMonthlyStats
+    // getYearlyStats
   }))
 
 const sortDateEntryArray = (compareEntry1, compareEntry2) => {
-  console.tron.log("Sorting!")
   if (isBefore(createJSDate(compareEntry1.date), createJSDate(compareEntry2.date))) {
     return 1
   } else {

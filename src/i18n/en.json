@@ -41,5 +41,17 @@
     "timeField": "Time",
     "addButton": "Add",
     "saveButton": "Save"
+  },
+  "settings": {
+    "title": "Settings",
+    "weight": "Weight",
+    "weightLbs": "lbs",
+    "reminder": "Reminder",
+    "theme": "Theme",
+    "dark": "dark",
+    "light": "light",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contactUs": "Contact Us"
   }
 }
