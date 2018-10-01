@@ -1,6 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { View, ViewStyle, TouchableOpacity, TextStyle, Linking, Picker } from "react-native"
+import { View, ViewStyle, TouchableOpacity, TextStyle, Linking } from "react-native"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
 import { Text } from "src/views/shared/text"
@@ -9,6 +9,7 @@ import { color, spacing } from "src/theme"
 import { NavigationScreenProps } from "react-navigation"
 import { translate } from "src/i18n"
 import { UserStoreModel } from "src/models/user-store"
+import { Button } from "src/views/shared/button"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -52,6 +53,20 @@ const SETTINGS_DETAILS_VALUE: TextStyle = {
   fontSize: 12,
 }
 
+const OPTION: TextStyle = {
+  fontSize: 20,
+  margin: spacing[3],
+  color: color.palette.lightGrey,
+}
+
+const OPTION_SELECTED: TextStyle = {
+  color: color.primary,
+}
+
+const SETTINGS_SAVE: ViewStyle = {
+  marginTop: spacing[6],
+}
+
 export interface SettingsScreenProps extends NavigationScreenProps<{}> {
   userStore: typeof UserStoreModel.Type
 }
@@ -61,6 +76,9 @@ interface SettingsScreenState {}
 @inject("userStore")
 @observer
 export class Settings extends React.Component<SettingsScreenProps, SettingsScreenState> {
+  state = {
+    displaySelectWeightUnits: false,
+  }
   handleOpenEmail = () => {
     Linking.canOpenURL("mailto:hi@robertcooper.me")
       .then(supported => {
@@ -72,17 +90,8 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
       })
       .catch(err => console.tron.error("An error occurred", err))
   }
-  handleWeightUnitSelection = () => {
-    return (
-      <Picker
-        selectedValue={this.props.userStore.weightUnits}
-        style={{ height: 50, width: 100 }}
-        onValueChange={itemValue => this.props.userStore.updateWeightUnits(itemValue)}
-      >
-        <Picker.Item label="lbs" value="lbs" />
-        <Picker.Item label="kgs" value="kgs" />
-      </Picker>
-    )
+  handleWeightUnitSelection = units => {
+    this.props.userStore.updateWeightUnits(units)
   }
   renderSettingsRow = ({
     label,
@@ -119,7 +128,7 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
             label: translate("settings.weight"),
             value: this.props.userStore.weightUnits,
             rowStyle: FIRST_SETTINGS_ROW,
-            handler: this.handleWeightUnitSelection,
+            handler: () => this.setState({ displaySelectWeightUnits: true }),
           })}
           {/* {this.renderSettingsRow({
             label: translate("settings.reminder"),
@@ -142,15 +151,46 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
             handler: this.handleOpenEmail,
           })}
         </View>
-        <Picker
-          selectedValue={this.props.userStore.weightUnits}
-          style={{ height: 50, width: 100 }}
-          onValueChange={itemValue => this.props.userStore.updateWeightUnits(itemValue)}
-          mode={"dropdown"}
-        >
-          <Picker.Item label="lbs" value="lbs" />
-          <Picker.Item label="kgs" value="kgs" />
-        </Picker>
+        {this.state.displaySelectWeightUnits && (
+          <View
+            style={{
+              position: "absolute",
+              backgroundColor: color.background,
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableOpacity onPress={() => this.handleWeightUnitSelection("lbs")}>
+              <Text
+                style={{
+                  ...OPTION,
+                  ...(this.props.userStore.weightUnits === "lbs" ? OPTION_SELECTED : {}),
+                }}
+              >
+                lbs
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.handleWeightUnitSelection("kgs")}>
+              <Text
+                style={{
+                  ...OPTION,
+                  ...(this.props.userStore.weightUnits === "kgs" ? OPTION_SELECTED : {}),
+                }}
+              >
+                kgs
+              </Text>
+            </TouchableOpacity>
+            <Button
+              onPress={() => this.setState({ displaySelectWeightUnits: false })}
+              style={SETTINGS_SAVE}
+              tx="settings.done"
+            />
+          </View>
+        )}
       </Screen>
     )
   }

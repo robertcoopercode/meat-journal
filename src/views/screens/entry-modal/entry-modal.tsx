@@ -158,14 +158,26 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.props.navigation.goBack()
   }
   handleSubmit = () => {
-    const entry = {
-      animalType: this.state.animalType,
-      name: this.state.name,
-      weight: this.state.weight,
-      date: this.state.date,
-      time: this.state.time,
+    if (this.props.navigation.getParam("type", "add") === "add") {
+      const entry = {
+        animalType: this.state.animalType,
+        name: this.state.name,
+        weight: this.state.weight,
+        date: this.state.date,
+        time: this.state.time,
+      }
+      this.props.entryStore.add(entry)
+    } else {
+      const entry = {
+        ...this.props.navigation.state.params.entry,
+        animalType: this.state.animalType,
+        name: this.state.name,
+        weight: this.state.weight,
+        date: this.state.date,
+        time: this.state.time,
+      }
+      this.props.entryStore.update(entry)
     }
-    this.props.entryStore.add(entry)
     this.props.navigation.goBack()
   }
   handleAnimalFieldFocus = () => {

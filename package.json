@@ -38,7 +38,6 @@
     "react-native-i18n": "2.0.12",
     "react-native-keyboard-aware-scroll-view": "^0.7.2",
     "react-native-keychain": "3.0.0-rc.3",
-    "react-native-picker": "^4.3.7",
     "react-native-splash-screen": "3.0.6",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "2.0.4",

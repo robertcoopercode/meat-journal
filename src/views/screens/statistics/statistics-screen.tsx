@@ -1,6 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { Animated, View, ViewStyle, TouchableOpacity } from "react-native"
+import { Animated, View, ViewStyle, TouchableOpacity, ScrollView } from "react-native"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
@@ -33,7 +33,7 @@ const BAR_CHART: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "flex-end",
-  width: "100%",
+  minWidth: "100%",
   paddingHorizontal: spacing[5],
   marginTop: spacing[5],
 }
@@ -105,14 +105,26 @@ export class Statistics extends React.Component<StatisticsScreenProps, Statistic
       <Screen style={ROOT} preset="fixed">
         <View style={BAR_CHART_CONTROLS}>
           <TouchableOpacity onPress={this.handlePreviousWeek}>
-            <FontAwesomeIcon name="chevron-left" size={15} color={color.primary} />
+            <FontAwesomeIcon
+              name="chevron-left"
+              size={15}
+              color={
+                this.state.currentWeekIndex < this.props.entryStore.getWeeklyStats().length - 1
+                  ? color.primary
+                  : color.transparent
+              }
+            />
           </TouchableOpacity>
           <Text preset="fieldLabel">{getWeekRangeText(this.state.currentWeekIndex)}</Text>
           <TouchableOpacity onPress={this.handleNextWeek}>
-            <FontAwesomeIcon name="chevron-right" size={15} color={color.primary} />
+            <FontAwesomeIcon
+              name="chevron-right"
+              size={15}
+              color={this.state.currentWeekIndex > 0 ? color.primary : color.transparent}
+            />
           </TouchableOpacity>
         </View>
-        <View style={BAR_CHART}>
+        <ScrollView horizontal contentContainerStyle={BAR_CHART}>
           {Object.entries(this.props.entryStore.getWeeklyStats()[this.state.currentWeekIndex]).map(
             entry => {
               // Entries are in the form of ['cow', 1]
@@ -137,7 +149,7 @@ export class Statistics extends React.Component<StatisticsScreenProps, Statistic
               )
             },
           )}
-        </View>
+        </ScrollView>
         <View style={SETTINGS_BUTTON_CONTAINER}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate("settings")}>
             <Ionicons name="md-settings" size={45} color={color.text} />

@@ -8031,10 +8031,6 @@ react-native-keychain@3.0.0-rc.3:
   version "3.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-3.0.0-rc.3.tgz#891ea07a564d1bf46b644bc615af21f15a04b12b"
 
-react-native-picker@^4.3.7:
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/react-native-picker/-/react-native-picker-4.3.7.tgz#9842e8c62ff0d8b676e9514d9f9172413c0518a8"
-
 react-native-safe-area-view@^0.7.0:
   version "0.7.0"
   resolved "http://registry.npmjs.org/react-native-safe-area-view/-/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
