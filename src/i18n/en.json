@@ -46,12 +46,14 @@
     "title": "Settings",
     "weight": "Weight",
     "weightLbs": "lbs",
+    "selectWeight": "Units",
     "reminder": "Reminder",
     "theme": "Theme",
     "dark": "dark",
     "light": "light",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "done": "Done"
   }
 }

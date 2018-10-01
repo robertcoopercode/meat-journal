@@ -42,8 +42,23 @@ const DateEntry = types
         weightKgs: parseFloat(entry.weight),
       })
     },
+    updateEntry(entry) {
+      console.tron.log("Finding individual entry")
+      self.data = self.data.map(item => {
+        if (item.id === entry.id) {
+          console.tron.log("Updating individual entry")
+          let updatedEntry = {
+            ...entry,
+            dateTimestamp: Date.now(),
+            weightLbs: parseFloat(entry.weight),
+            weightKgs: parseFloat(entry.weight),
+          }
+          return updatedEntry
+        }
+        return item
+      })
+    },
     deleteEntry(id) {
-      console.tron.log("Deleting individual entry")
       self.data = self.data.filter(item => item.id !== id)
     },
   }))
@@ -84,12 +99,20 @@ export const EntryStoreModel = types
       self.entries = self.entries.sort(sortDateEntryArray)
       return
     },
+    update(entry) {
+      self.entries.some(storeDateEntry => {
+        if (storeDateEntry.date === entry.date) {
+          storeDateEntry.updateEntry(entry)
+          return true
+        }
+        return false
+      })
+      self.entries = self.entries.sort(sortDateEntryArray)
+    },
     delete(entry) {
-      console.tron.log("Looking for entries to delete")
       self.entries.some(storeDateEntry => {
         console.tron.log(storeDateEntry.date, entry.date)
         if (storeDateEntry.date === entry.date) {
-          console.tron.log("Found entry to delete")
           storeDateEntry.deleteEntry(entry.id)
           return true
         }
