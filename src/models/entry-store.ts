@@ -4,13 +4,17 @@ import {
   createJSDate,
   uniqueId,
   getStartOfWeek,
+  getStartOfMonth,
   convertDashedDateToSlashedDate,
   dashedDateFormatConversion,
   isSameWeek,
+  isSameMonth,
   addWeek,
+  addMonth,
 } from "src/lib/utility"
 import format from "date-fns/format"
 import differenceInWeeks from "date-fns/difference_in_weeks"
+import differenceInMonths from "date-fns/difference_in_months"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -174,7 +178,39 @@ export const EntryStoreModel = types
         return addWeek(previousWeekStartDate, -1)
       }
     },
-    // getMonthlyStats
+    getMonthlyStats() {
+      const monthStats = [{}]
+      let startOfMonth = getStartOfMonth(new Date())
+      self.entries.forEach(entry => {
+        let entryAdded = false
+        while (monthStats.length < 30 && !entryAdded) {
+          if (isSameMonth(startOfMonth, createJSDate(entry.date))) {
+            const currentMonthIndex = Math.abs(
+              differenceInMonths(startOfMonth, getStartOfMonth(new Date())),
+            )
+            if (monthStats[currentMonthIndex]) {
+              entry.data.forEach(item => {
+                if (monthStats[currentMonthIndex][item.animalType]) {
+                  monthStats[currentMonthIndex][item.animalType] =
+                    monthStats[currentMonthIndex][item.animalType] + item.weightKgs
+                } else {
+                  monthStats[currentMonthIndex][item.animalType] = item.weightKgs
+                }
+              })
+            }
+            entryAdded = true
+          } else {
+            startOfMonth = setNewStartOfMonth(startOfMonth)
+            monthStats.push({})
+          }
+        }
+      })
+      console.tron.log(monthStats)
+      return monthStats
+      function setNewStartOfMonth(previousMonthStartDate) {
+        return addMonth(previousMonthStartDate, -1)
+      }
+    },
     // getYearlyStats
   }))
 

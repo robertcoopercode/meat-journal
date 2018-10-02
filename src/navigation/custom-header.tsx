@@ -1,6 +1,6 @@
 import * as React from "react"
-import { SafeAreaView, StatusBar, TouchableOpacity, View, ViewStyle, TextStyle } from "react-native"
-import { NavigationScreenProps } from "react-navigation"
+import { StatusBar, TouchableOpacity, View, ViewStyle, TextStyle } from "react-native"
+import { NavigationScreenProps, SafeAreaView } from "react-navigation"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
 import { Text } from "src/views/shared/text"
@@ -163,7 +163,7 @@ export function SettingsHeader(props: SreenHeaderProps) {
     <SafeAreaView style={HEADER}>
       <StatusBar barStyle="light-content" />
       <View style={SETTINGS_HEADER_ROW}>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity onPress={() => props.navigation.pop()}>
           <FontAwesomeIcon name="chevron-left" size={20} color={color.palette.white} />
         </TouchableOpacity>
         <Text preset="header" style={SETTINGS_HEADER_TITLE} tx="settings.title" />
