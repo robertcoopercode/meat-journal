@@ -13,10 +13,14 @@ import { color } from "src/theme/color"
 // Use this to view the screens that came with the boilerplate
 // import { ExampleNavigator } from "./example-navigator"
 
-const LogbookNavigator = createStackNavigator(
+const logbookScreenNavigator = createStackNavigator(
   {
-    logbookList: { screen: LogbookList },
-    logbookCalendar: { screen: LogbookCalendar },
+    logbookList: {
+      screen: LogbookList,
+    },
+    logbookCalendar: {
+      screen: LogbookCalendar,
+    },
   },
   {
     navigationOptions: {
@@ -25,11 +29,37 @@ const LogbookNavigator = createStackNavigator(
   },
 )
 
-const StatisticsNavigator = createStackNavigator(
+const LogbookNavigator = createStackNavigator(
+  {
+    logbookScreen: logbookScreenNavigator,
+    entryModal: {
+      screen: EntryModal,
+      navigationOptions: { header: null },
+    },
+  },
+  {
+    headerMode: "none",
+    mode: "modal",
+    cardStyle: {
+      backgroundColor: "transparent",
+      opacity: 1,
+    },
+    transitionConfig: forVertical,
+    navigationOptions: { gesturesEnabled: false },
+  },
+)
+
+const StatisticsAndSettingsNavigator = createStackNavigator(
   {
     statisticsWeekly: { screen: Statistics },
     statisticsMonthly: { screen: Statistics },
     statisticsYearly: { screen: Statistics },
+    settingsScreen: {
+      screen: Settings,
+      navigationOptions: {
+        header: SettingsHeader,
+      },
+    },
   },
   {
     navigationOptions: {
@@ -38,7 +68,7 @@ const StatisticsNavigator = createStackNavigator(
   },
 )
 
-const MainTabNavigator = createBottomTabNavigator(
+const mainAppNavigation = createBottomTabNavigator(
   {
     logbook: {
       screen: LogbookNavigator,
@@ -47,8 +77,8 @@ const MainTabNavigator = createBottomTabNavigator(
         tabBarIcon: LogbookIcon,
       },
     },
-    statistics: {
-      screen: StatisticsNavigator,
+    StatisticsAndSettingsNavigator: {
+      screen: StatisticsAndSettingsNavigator,
       navigationOptions: { title: "STATISTICS", tabBarIcon: StatisticsIcon },
     },
   },
@@ -65,6 +95,17 @@ const MainTabNavigator = createBottomTabNavigator(
         marginTop: 5,
       },
     },
+  },
+)
+
+export const RootNavigator = createStackNavigator(
+  {
+    welcome: { screen: Welcome },
+    mainAppNavigation: { screen: mainAppNavigation },
+  },
+  {
+    headerMode: "none",
+    navigationOptions: { gesturesEnabled: false },
   },
 )
 
@@ -85,36 +126,3 @@ function forVertical(props) {
     transform: [{ translateX }, { translateY }],
   }
 }
-
-const SettingsNavigator = createStackNavigator(
-  {
-    settings: { screen: Settings, mode: "card" },
-  },
-  {
-    mode: "card",
-    navigationOptions: {
-      header: SettingsHeader,
-    },
-  },
-)
-
-export const RootNavigator = createStackNavigator(
-  {
-    welcome: { screen: Welcome },
-    mainTabNavigation: { screen: MainTabNavigator },
-    entryModal: { screen: EntryModal },
-    settings: {
-      screen: SettingsNavigator,
-    },
-  },
-  {
-    headerMode: "none",
-    mode: "modal",
-    navigationOptions: { gesturesEnabled: false },
-    cardStyle: {
-      backgroundColor: "transparent",
-      opacity: 1,
-    },
-    transitionConfig: forVertical,
-  },
-)
