@@ -9,7 +9,7 @@ import { EntryGroup } from "src/views/shared/entry-group"
 import { EntryStoreModel } from "src/models/entry-store"
 import { Screen } from "src/views/shared/screen"
 import { color } from "src/theme"
-import { dashedDateFormatConversion } from "src/lib/utility"
+import { createDashedDate, dashedDateFormatConversion } from "src/lib/utility"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -28,6 +28,10 @@ export class LogbookCalendar extends React.Component<
   LogbookCalendarScreenProps,
   LogbookCalendarScreenState
 > {
+  componentDidMount() {
+    this.props.entryStore.resetSelectedDay()
+    this.handleDaySelection({ dateString: createDashedDate(new Date()) })
+  }
   handleDaySelection = day => {
     this.props.entryStore.selectDay(day)
   }

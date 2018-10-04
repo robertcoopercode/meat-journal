@@ -2,6 +2,7 @@ import { types } from "mobx-state-tree"
 import isBefore from "date-fns/is_before"
 import {
   createJSDate,
+  createIsoFormattedDate,
   uniqueId,
   getStartOfWeek,
   getStartOfMonth,
@@ -19,6 +20,7 @@ import format from "date-fns/format"
 import differenceInWeeks from "date-fns/difference_in_weeks"
 import differenceInMonths from "date-fns/difference_in_months"
 import differenceInYears from "date-fns/difference_in_years"
+import parse from "date-fns/parse"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -49,23 +51,23 @@ const DateEntry = types
         weightLbs: parseFloat(entry.weight),
         weightKgs: parseFloat(entry.weight),
       })
+      self.data = self.data.sort(timeComparison)
     },
-    updateEntry(entry) {
-      console.tron.log("Finding individual entry")
-      self.data = self.data.map(item => {
-        if (item.id === entry.id) {
-          console.tron.log("Updating individual entry")
-          let updatedEntry = {
-            ...entry,
-            dateTimestamp: Date.now(),
-            weightLbs: parseFloat(entry.weight),
-            weightKgs: parseFloat(entry.weight),
-          }
-          return updatedEntry
-        }
-        return item
-      })
-    },
+    // updateEntry(entry) {
+    //   self.data = self.data.map(item => {
+    //     if (item.id === entry.id) {
+    //       let updatedEntry = {
+    //         ...entry,
+    //         dateTimestamp: Date.now(),
+    //         weightLbs: parseFloat(entry.weight),
+    //         weightKgs: parseFloat(entry.weight),
+    //       }
+    //       return updatedEntry
+    //     }
+    //     return item
+    //   })
+    //   self.data = self.data.sort(timeComparison)
+    // },
     deleteEntry(id) {
       self.data = self.data.filter(item => item.id !== id)
     },
@@ -104,22 +106,61 @@ export const EntryStoreModel = types
           }),
         )
       }
-      self.entries = self.entries.sort(sortDateEntryArray)
+      self.entries = self.entries.sort(dateComparison)
       return
     },
-    update(entry) {
+    update(previousEntry, entry) {
       self.entries.some(storeDateEntry => {
-        if (storeDateEntry.date === entry.date) {
-          storeDateEntry.updateEntry(entry)
+        // First delete the previous entry
+        if (storeDateEntry.date === previousEntry.date) {
+          storeDateEntry.deleteEntry(previousEntry.id)
           return true
         }
         return false
       })
-      self.entries = self.entries.sort(sortDateEntryArray)
+      // Remove any date groups that no longer have entries
+      self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
+      // Add back the entry with the updated values
+      const dateAllreadyExists = self.entries.some(storeDateEntry => {
+        if (entry.date === storeDateEntry.date) {
+          storeDateEntry.addEntry(entry)
+          return true
+        }
+      })
+      if (!dateAllreadyExists) {
+        self.entries.push(
+          DateEntry.create({
+            date: entry.date,
+            data: [
+              {
+                id: uniqueId(),
+                animalType: entry.animalType,
+                name: entry.name,
+                dateTimestamp: Date.now(),
+                date: entry.date,
+                time: entry.time,
+                weightLbs: parseFloat(entry.weight),
+                weightKgs: parseFloat(entry.weight),
+              },
+            ],
+            selected: false,
+          }),
+        )
+      }
+      return (self.entries = self.entries.sort(dateComparison))
+
+      // self.entries.some(storeDateEntry => {
+      //   if (storeDateEntry.date === entry.date) {
+      //     storeDateEntry.updateEntry(entry)
+      //     return true
+      //   }
+      //   return false
+      // })
+      // self.entries = self.entries.sort(dateComparison)
+      // return
     },
     delete(entry) {
       self.entries.some(storeDateEntry => {
-        console.tron.log(storeDateEntry.date, entry.date)
         if (storeDateEntry.date === entry.date) {
           storeDateEntry.deleteEntry(entry.id)
           return true
@@ -129,6 +170,7 @@ export const EntryStoreModel = types
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
     },
     selectDay(day) {
+      console.tron.log("Selected day: ", day)
       const selectedDate = convertDashedDateToSlashedDate(day.dateString)
       self.entries.forEach(entry => {
         if (entry.date !== selectedDate) {
@@ -248,10 +290,21 @@ export const EntryStoreModel = types
     },
   }))
 
-const sortDateEntryArray = (compareEntry1, compareEntry2) => {
+const dateComparison = (compareEntry1, compareEntry2) => {
   if (isBefore(createJSDate(compareEntry1.date), createJSDate(compareEntry2.date))) {
     return 1
   } else {
     return -1
+  }
+}
+
+const timeComparison = (compareEntry1, compareEntry2) => {
+  const time1 = `${createIsoFormattedDate(new Date())} ${compareEntry1.time}`
+  const time2 = `${createIsoFormattedDate(new Date())} ${compareEntry2.time}`
+  console.tron.log(time1, time2)
+  if (isBefore(time1, time2)) {
+    return -1
+  } else {
+    return 1
   }
 }

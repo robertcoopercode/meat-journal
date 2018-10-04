@@ -103,6 +103,12 @@ interface EntryModalScreenState {
     | {
         [x: string]: string
       }
+  beforeUpdateEntryDetails:
+    | {
+        date: string
+        id: string
+      }
+    | {}
 }
 
 @inject("userStore")
@@ -131,6 +137,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     weight: null,
     filteredAnimalTypes: SUPPORTED_ANIMALS,
     errors: {},
+    beforeUpdateEntryDetails: {},
   }
 
   static navigationOptions = {}
@@ -148,14 +155,21 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
   }
   componentDidMount() {
     if (this.props.navigation.getParam("type", "add") === "edit") {
-      const { name, animalType, date, time } = this.props.navigation.state.params.entry
+      const { id, name, animalType, date, time } = this.props.navigation.state.params.entry
       let weight
       if (this.props.userStore.weightUnits === "kgs") {
         weight = this.props.navigation.state.params.entry.weightKgs.toString()
       } else {
         weight = this.props.navigation.state.params.entry.weightLbs.toString()
       }
-      this.setState({ name, animalType, date, time, weight })
+      this.setState({
+        name,
+        animalType,
+        date,
+        time,
+        weight,
+        beforeUpdateEntryDetails: { date, id },
+      })
     }
   }
   setInputRef = inputName => input => {
@@ -172,7 +186,6 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     if (!Boolean(this.state.name.trim())) {
       errors.name = "Enter a value for the name"
     }
-    console.tron.log(!isNaN(parseFloat(this.state.weight)))
     return errors
   }
   handleOnSubmitEditing = inputName => () => {
@@ -182,14 +195,12 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({ openedDatePicker: false })
   }
   handleDeleteEntry = () => {
-    console.tron.log("Deleting Entry")
     this.props.entryStore.delete(this.props.navigation.state.params.entry)
     this.props.navigation.goBack()
   }
   handleSubmit = () => {
     const errors = this.validateFields()
-    console.tron.log("Validating")
-    if ((Object.entries(errors).length = 0)) {
+    if (Object.entries(errors).length === 0) {
       if (this.props.navigation.getParam("type", "add") === "add") {
         const entry = {
           animalType: this.state.animalType,
@@ -208,11 +219,10 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
           date: this.state.date,
           time: this.state.time,
         }
-        this.props.entryStore.update(entry)
+        this.props.entryStore.update(this.state.beforeUpdateEntryDetails, entry)
       }
       this.props.navigation.goBack()
     } else {
-      console.tron.log("Setting errors, ", errors)
       this.setState({ errors })
     }
   }
@@ -241,9 +251,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
         weight: state.weight,
         errors: {},
       }))
-      return console.tron.log("INVALID NUMBER")
     } else if (parsedNumber > 100) {
-      return console.tron.log("Only weights under 100 can be entered")
     } else if (text.includes(".") && text.split(".")[1].length > 2) {
       parsedNumber = Math.round(parsedNumber * 100) / 100
       return this.setState({ weight: parsedNumber.toString(), errors: {} })
