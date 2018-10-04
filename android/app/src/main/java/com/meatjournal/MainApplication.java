@@ -3,7 +3,6 @@ package com.meatjournal;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.beefe.picker.PickerViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.keychain.KeychainPackage;
@@ -28,7 +27,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new PickerViewPackage(),
             new VectorIconsPackage(),
             new SplashScreenReactPackage(),
             new KeychainPackage(),

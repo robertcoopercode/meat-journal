@@ -19,10 +19,10 @@ const ADD_ENTRY_CONTAINER: ViewStyle = {
   position: "absolute",
   height: ADD_ENTRY_CONTAINER_HEIGHT,
   bottom: 0,
-  width: "100%",
+  right: 0,
   alignItems: "flex-end",
   justifyContent: "center",
-  paddingHorizontal: spacing[5],
+  paddingRight: spacing[5],
 }
 
 @inject("navigationStore")

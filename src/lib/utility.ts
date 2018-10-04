@@ -2,10 +2,13 @@ import format from "date-fns/format"
 import startOfWeek from "date-fns/start_of_week"
 import isSameWeekFns from "date-fns/is_same_week"
 import isSameMonthFns from "date-fns/is_same_month"
+import isSameYearFns from "date-fns/is_same_year"
 import addWeeksFns from "date-fns/add_weeks"
 import addMonthsFns from "date-fns/add_months"
+import addYearsFns from "date-fns/add_years"
 import endOfWeek from "date-fns/end_of_week"
 import startOfMonthFns from "date-fns/start_of_month"
+import startOfYearFns from "date-fns/start_of_year"
 
 export const uniqueId = () => {
   function s4() {
@@ -40,7 +43,11 @@ export const getStartOfWeek = date => {
 }
 
 export const getStartOfMonth = date => {
-  return startOfMonthFns(date) // Week starts on Monday
+  return startOfMonthFns(date)
+}
+
+export const getStartOfYear = date => {
+  return startOfYearFns(date)
 }
 
 export const isSameWeek = (dateLeft, dateRight) => {
@@ -51,12 +58,20 @@ export const isSameMonth = (dateLeft, dateRight) => {
   return isSameMonthFns(dateLeft, dateRight)
 }
 
+export const isSameYear = (dateLeft, dateRight) => {
+  return isSameYearFns(dateLeft, dateRight)
+}
+
 export const addWeek = (date, amount) => {
   return addWeeksFns(date, amount)
 }
 
 export const addMonth = (date, amount) => {
   return addMonthsFns(date, amount)
+}
+
+export const addYear = (date, amount) => {
+  return addYearsFns(date, amount)
 }
 
 export const getWeekRangeText = weeksFromThisWeek => {
@@ -71,4 +86,10 @@ export const getMonthRangeText = monthsFromThisMonth => {
   const month = addMonthsFns(new Date(), -1 * monthsFromThisMonth)
   const formattedMonth = format(month, "MMMM YYYY")
   return formattedMonth
+}
+
+export const getYearRangeText = yearsFromThisYear => {
+  const month = addYearsFns(new Date(), -1 * yearsFromThisYear)
+  const formattedYear = format(month, "YYYY")
+  return formattedYear
 }

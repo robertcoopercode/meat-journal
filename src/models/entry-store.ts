@@ -5,16 +5,20 @@ import {
   uniqueId,
   getStartOfWeek,
   getStartOfMonth,
+  getStartOfYear,
   convertDashedDateToSlashedDate,
   dashedDateFormatConversion,
   isSameWeek,
   isSameMonth,
+  isSameYear,
   addWeek,
   addMonth,
+  addYear,
 } from "src/lib/utility"
 import format from "date-fns/format"
 import differenceInWeeks from "date-fns/difference_in_weeks"
 import differenceInMonths from "date-fns/difference_in_months"
+import differenceInYears from "date-fns/difference_in_years"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -205,13 +209,43 @@ export const EntryStoreModel = types
           }
         }
       })
-      console.tron.log(monthStats)
       return monthStats
       function setNewStartOfMonth(previousMonthStartDate) {
         return addMonth(previousMonthStartDate, -1)
       }
     },
-    // getYearlyStats
+    getYearlyStats() {
+      const yearStats = [{}]
+      let startOfYear = getStartOfYear(new Date())
+      self.entries.forEach(entry => {
+        let entryAdded = false
+        while (yearStats.length < 30 && !entryAdded) {
+          if (isSameYear(startOfYear, createJSDate(entry.date))) {
+            const currentYearIndex = Math.abs(
+              differenceInYears(startOfYear, getStartOfYear(new Date())),
+            )
+            if (yearStats[currentYearIndex]) {
+              entry.data.forEach(item => {
+                if (yearStats[currentYearIndex][item.animalType]) {
+                  yearStats[currentYearIndex][item.animalType] =
+                    yearStats[currentYearIndex][item.animalType] + item.weightKgs
+                } else {
+                  yearStats[currentYearIndex][item.animalType] = item.weightKgs
+                }
+              })
+            }
+            entryAdded = true
+          } else {
+            startOfYear = setNewStartOfYear(startOfYear)
+            yearStats.push({})
+          }
+        }
+      })
+      return yearStats
+      function setNewStartOfYear(previousYearStartDate) {
+        return addYear(previousYearStartDate, -1)
+      }
+    },
   }))
 
 const sortDateEntryArray = (compareEntry1, compareEntry2) => {

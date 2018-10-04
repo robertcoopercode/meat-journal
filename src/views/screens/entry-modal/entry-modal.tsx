@@ -72,6 +72,17 @@ const MODAL_FORM_SUBMIT: ViewStyle = {
 
 const DELETE_ICON: ViewStyle = {}
 
+const ERROR_TEXT: TextStyle = {
+  fontSize: 8,
+  position: "absolute",
+  bottom: 0,
+  color: color.tertiary,
+}
+
+const FORM_FIELD_CONTAINER: ViewStyle = {
+  position: "relative",
+}
+
 export interface EntryModalScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
   userStore: typeof UserStoreModel.Type
@@ -87,6 +98,11 @@ interface EntryModalScreenState {
   time: string
   weight: string
   filteredAnimalTypes: string[]
+  errors:
+    | {}
+    | {
+        [x: string]: string
+      }
 }
 
 @inject("userStore")
@@ -114,6 +130,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     time: format(new Date(), "h:mm A"),
     weight: null,
     filteredAnimalTypes: SUPPORTED_ANIMALS,
+    errors: {},
   }
 
   static navigationOptions = {}
@@ -144,13 +161,25 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
   setInputRef = inputName => input => {
     this.inputs[inputName] = input
   }
+  validateFields = () => {
+    const errors = {}
+    if (!SUPPORTED_ANIMALS.includes(this.state.animalType.toLocaleLowerCase())) {
+      errors.animalType = "Not an available animal type"
+    }
+    if (isNaN(parseFloat(this.state.weight))) {
+      errors.weight = "Not a valid number"
+    }
+    if (!Boolean(this.state.name.trim())) {
+      errors.name = "Enter a value for the name"
+    }
+    console.tron.log(!isNaN(parseFloat(this.state.weight)))
+    return errors
+  }
   handleOnSubmitEditing = inputName => () => {
     this.inputs[inputName].focus()
   }
   handleDateClose = () => {
     this.setState({ openedDatePicker: false })
-    // Open the time picker after the date picker closes
-    // setTimeout(this.inputs.time.onPressDate, 500)
   }
   handleDeleteEntry = () => {
     console.tron.log("Deleting Entry")
@@ -158,27 +187,34 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.props.navigation.goBack()
   }
   handleSubmit = () => {
-    if (this.props.navigation.getParam("type", "add") === "add") {
-      const entry = {
-        animalType: this.state.animalType,
-        name: this.state.name,
-        weight: this.state.weight,
-        date: this.state.date,
-        time: this.state.time,
+    const errors = this.validateFields()
+    console.tron.log("Validating")
+    if ((Object.entries(errors).length = 0)) {
+      if (this.props.navigation.getParam("type", "add") === "add") {
+        const entry = {
+          animalType: this.state.animalType,
+          name: this.state.name,
+          weight: this.state.weight,
+          date: this.state.date,
+          time: this.state.time,
+        }
+        this.props.entryStore.add(entry)
+      } else {
+        const entry = {
+          ...this.props.navigation.state.params.entry,
+          animalType: this.state.animalType,
+          name: this.state.name,
+          weight: this.state.weight,
+          date: this.state.date,
+          time: this.state.time,
+        }
+        this.props.entryStore.update(entry)
       }
-      this.props.entryStore.add(entry)
+      this.props.navigation.goBack()
     } else {
-      const entry = {
-        ...this.props.navigation.state.params.entry,
-        animalType: this.state.animalType,
-        name: this.state.name,
-        weight: this.state.weight,
-        date: this.state.date,
-        time: this.state.time,
-      }
-      this.props.entryStore.update(entry)
+      console.tron.log("Setting errors, ", errors)
+      this.setState({ errors })
     }
-    this.props.navigation.goBack()
   }
   handleAnimalFieldFocus = () => {
     this.setState({ animalFieldFocused: true })
@@ -191,10 +227,11 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({
       filteredAnimalTypes,
       animalType: text,
+      errors: {},
     })
   }
   handleAnimalFieldSelect = animalType => {
-    this.setState({ animalType, animalFieldFocused: false })
+    this.setState({ animalType, animalFieldFocused: false, errors: {} })
     this.inputs.animalType.blur()
   }
   handleWeightFieldChange = text => {
@@ -202,15 +239,16 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     if (isNaN(text)) {
       this.setState(state => ({
         weight: state.weight,
+        errors: {},
       }))
       return console.tron.log("INVALID NUMBER")
     } else if (parsedNumber > 100) {
       return console.tron.log("Only weights under 100 can be entered")
     } else if (text.includes(".") && text.split(".")[1].length > 2) {
       parsedNumber = Math.round(parsedNumber * 100) / 100
-      return this.setState({ weight: parsedNumber.toString() })
+      return this.setState({ weight: parsedNumber.toString(), errors: {} })
     }
-    return this.setState({ weight: text })
+    return this.setState({ weight: text, errors: {} })
   }
   renderFilteredAnimalTypes = () => {
     return this.state.filteredAnimalTypes.map(animalType => (
@@ -252,25 +290,36 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
               }}
             >
               <View style={MODAL_FORM_BODY}>
-                <TextField
-                  labelTx={"entryModal.nameField"}
-                  setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
-                  // focus on the next input after pressing "next" on the keyboard
-                  autoCapitalize={"none"}
-                  value={this.state.name}
-                  onChangeText={text => this.setState({ name: text })}
-                />
-                {/* Make a custom dropdown here instead */}
-                <TextField
-                  onFocus={this.handleAnimalFieldFocus}
-                  onBlur={this.handleAnimalFieldBlur}
-                  labelTx={"entryModal.animalField"}
-                  setRef={this.setInputRef("animalType")}
-                  autoCapitalize={"none"}
-                  value={this.state.animalType}
-                  onChangeText={this.handleAnimalFieldChange}
-                  style={{ zIndex: 2 }} // zIndex required to appear above dropdown
-                />
+                <View style={FORM_FIELD_CONTAINER}>
+                  <TextField
+                    labelTx={"entryModal.nameField"}
+                    setRef={this.setInputRef("name")} // Setting the refs in case I want to automatically
+                    // focus on the next input after pressing "next" on the keyboard
+                    autoCapitalize={"none"}
+                    value={this.state.name}
+                    onChangeText={text => this.setState({ name: text, errors: {} })}
+                  />
+                  {this.state.errors &&
+                    this.state.errors.name && (
+                      <Text style={ERROR_TEXT}>{this.state.errors.name}</Text>
+                    )}
+                </View>
+                <View style={FORM_FIELD_CONTAINER}>
+                  <TextField
+                    onFocus={this.handleAnimalFieldFocus}
+                    onBlur={this.handleAnimalFieldBlur}
+                    labelTx={"entryModal.animalField"}
+                    setRef={this.setInputRef("animalType")}
+                    autoCapitalize={"none"}
+                    value={this.state.animalType}
+                    onChangeText={this.handleAnimalFieldChange}
+                    style={{ zIndex: 2 }} // zIndex required to appear above dropdown
+                  />
+                  {this.state.errors &&
+                    this.state.errors.animalType && (
+                      <Text style={ERROR_TEXT}>{this.state.errors.animalType}</Text>
+                    )}
+                </View>
                 {this.state.animalFieldFocused && (
                   <View style={{ overflow: "visible", zIndex: 1 }}>
                     <ScrollView
@@ -293,13 +342,19 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
                     </ScrollView>
                   </View>
                 )}
-                <TextField
-                  labelTx={"entryModal.weightField"}
-                  setRef={this.setInputRef("weight")}
-                  keyboardType={"numeric"}
-                  value={this.state.weight}
-                  onChangeText={this.handleWeightFieldChange}
-                />
+                <View style={FORM_FIELD_CONTAINER}>
+                  <TextField
+                    labelTx={"entryModal.weightField"}
+                    setRef={this.setInputRef("weight")}
+                    keyboardType={"numeric"}
+                    value={this.state.weight}
+                    onChangeText={this.handleWeightFieldChange}
+                  />
+                  {this.state.errors &&
+                    this.state.errors.weight && (
+                      <Text style={ERROR_TEXT}>{this.state.errors.weight}</Text>
+                    )}
+                </View>
                 <DatePicker
                   setRef={this.setInputRef("date")}
                   labelTx={"entryModal.dateField"}
