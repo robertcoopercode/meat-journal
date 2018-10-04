@@ -31,4 +31,4 @@ export const API: string | undefined = process.env.API
 
 export const persistAsyncStore = true
 
-export const alwaysDisplayWelcomeScreen = true
+export const alwaysDisplayWelcomeScreen = false

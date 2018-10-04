@@ -32,20 +32,9 @@ const logbookScreenNavigator = createStackNavigator(
 const LogbookNavigator = createStackNavigator(
   {
     logbookScreen: logbookScreenNavigator,
-    entryModal: {
-      screen: EntryModal,
-      navigationOptions: { header: null },
-    },
   },
   {
     headerMode: "none",
-    mode: "modal",
-    cardStyle: {
-      backgroundColor: "transparent",
-      opacity: 1,
-    },
-    transitionConfig: forVertical,
-    navigationOptions: { gesturesEnabled: false },
   },
 )
 
@@ -102,10 +91,19 @@ export const RootNavigator = createStackNavigator(
   {
     welcome: { screen: Welcome },
     mainAppNavigation: { screen: mainAppNavigation },
+    entryModal: {
+      screen: EntryModal,
+      navigationOptions: { header: null },
+    },
   },
   {
     headerMode: "none",
-    navigationOptions: { gesturesEnabled: false },
+    mode: "modal",
+    cardStyle: {
+      backgroundColor: "transparent",
+      opacity: 1,
+    },
+    transitionConfig: forVertical,
   },
 )
 
