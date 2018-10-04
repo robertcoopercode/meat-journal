@@ -38,6 +38,14 @@ export const convertDashedDateToSlashedDate = dashedDate => {
   return format(dashedDate, "DD/MM/YYYY")
 }
 
+export const createDashedDate = date => {
+  return format(date, "YYYY-MM-DD")
+}
+
+export const createIsoFormattedDate = date => {
+  return format(date, "MM/DD/YYYY")
+}
+
 export const getStartOfWeek = date => {
   return startOfWeek(date, { weekStartsOn: 1 }) // Week starts on Monday
 }
