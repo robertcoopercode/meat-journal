@@ -77,6 +77,7 @@ export const EntryStoreModel = types
   .model("EntryStore", {
     entries: types.optional(types.array(DateEntry), []),
     selectedDate: types.string,
+    newlyUpdatedEntry: types.boolean,
   })
   .actions(self => ({
     add(entry) {
@@ -106,6 +107,7 @@ export const EntryStoreModel = types
           }),
         )
       }
+      self.newlyUpdatedEntry = true
       self.entries = self.entries.sort(dateComparison)
       return
     },
@@ -147,6 +149,7 @@ export const EntryStoreModel = types
           }),
         )
       }
+      self.newlyUpdatedEntry = true
       return (self.entries = self.entries.sort(dateComparison))
 
       // self.entries.some(storeDateEntry => {
@@ -167,10 +170,10 @@ export const EntryStoreModel = types
         }
         return false
       })
+      self.newlyUpdatedEntry = true
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
     },
     selectDay(day) {
-      console.tron.log("Selected day: ", day)
       const selectedDate = convertDashedDateToSlashedDate(day.dateString)
       self.entries.forEach(entry => {
         if (entry.date !== selectedDate) {
@@ -186,6 +189,9 @@ export const EntryStoreModel = types
     resetSelectedDay() {
       self.selectedDate = format(Date.now(), "YYYY-MM-DD")
       self.entries.forEach(entry => (entry.selected = false))
+    },
+    resetNewlyUpdatedEntry() {
+      self.newlyUpdatedEntry = false
     },
   }))
   .views(self => ({
@@ -219,10 +225,10 @@ export const EntryStoreModel = types
           }
         }
       })
-      return weekStats
-      function setNewStartOfWeek(previousWeekStartDate) {
-        return addWeek(previousWeekStartDate, -1)
-      }
+      const sortedWeekStats = weekStats.map(stat => {
+        return Object.entries(stat).sort(statisticsComparion)
+      })
+      return sortedWeekStats
     },
     getMonthlyStats() {
       const monthStats = [{}]
@@ -251,10 +257,10 @@ export const EntryStoreModel = types
           }
         }
       })
-      return monthStats
-      function setNewStartOfMonth(previousMonthStartDate) {
-        return addMonth(previousMonthStartDate, -1)
-      }
+      const sortedMonthStats = monthStats.map(stat => {
+        return Object.entries(stat).sort(statisticsComparion)
+      })
+      return sortedMonthStats
     },
     getYearlyStats() {
       const yearStats = [{}]
@@ -283,12 +289,32 @@ export const EntryStoreModel = types
           }
         }
       })
-      return yearStats
-      function setNewStartOfYear(previousYearStartDate) {
-        return addYear(previousYearStartDate, -1)
-      }
+      const sortedYearStats = yearStats.map(stat => {
+        return Object.entries(stat).sort(statisticsComparion)
+      })
+      return sortedYearStats
     },
   }))
+
+const setNewStartOfWeek = previousWeekStartDate => {
+  return addWeek(previousWeekStartDate, -1)
+}
+
+const setNewStartOfMonth = previousMonthStartDate => {
+  return addMonth(previousMonthStartDate, -1)
+}
+
+const setNewStartOfYear = previousYearStartDate => {
+  return addYear(previousYearStartDate, -1)
+}
+
+const statisticsComparion = (compareEntry1, compareEntry2) => {
+  if (compareEntry1[1] < compareEntry2[1]) {
+    return 1
+  } else {
+    return -1
+  }
+}
 
 const dateComparison = (compareEntry1, compareEntry2) => {
   if (isBefore(createJSDate(compareEntry1.date), createJSDate(compareEntry2.date))) {
@@ -301,7 +327,6 @@ const dateComparison = (compareEntry1, compareEntry2) => {
 const timeComparison = (compareEntry1, compareEntry2) => {
   const time1 = `${createIsoFormattedDate(new Date())} ${compareEntry1.time}`
   const time2 = `${createIsoFormattedDate(new Date())} ${compareEntry2.time}`
-  console.tron.log(time1, time2)
   if (isBefore(time1, time2)) {
     return -1
   } else {

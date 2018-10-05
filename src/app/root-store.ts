@@ -13,6 +13,7 @@ export const RootStoreModel = types.model("RootStore").props({
   entryStore: types.optional(EntryStoreModel, {
     entries: MOCK_ENTRIES,
     selectedDate: format(Date.now(), "YYYY-MM-DD"),
+    newlyUpdatedEntry: false,
   }),
   userStore: types.optional(UserStoreModel, { weightUnits: "lbs" }),
 })
