@@ -69,54 +69,81 @@ const NO_ENTRIES_TEXT_CONTAINER: ViewStyle = {
   alignSelf: "center",
 }
 
+const INITIAL_STATE = {
+  currentWeekIndex: 0, // 0 corresponds to the current week and 1 corresponds to last week...
+  currentMonthIndex: 0, // 0 corresponds to the current month and 1 corresponds to last month...
+  currentYearIndex: 0, // 0 corresponds to the current year and 1 corresponds to last year...
+  chartLoaded: false,
+}
+
 interface StatisticsScreenState {
   currentWeekIndex: number
   currentMonthIndex: number
   currentYearIndex: number
+  chartLoaded: boolean
 }
 
 @inject("entryStore")
 @observer
 export class Statistics extends React.Component<StatisticsScreenProps, StatisticsScreenState> {
-  state = {
-    currentWeekIndex: 0, // 0 corresponds to the current week and 1 corresponds to last week...
-    currentMonthIndex: 0, // 0 corresponds to the current month and 1 corresponds to last month...
-    currentYearIndex: 0, // 0 corresponds to the current year and 1 corresponds to last year...
-  }
+  _focusSubscription: any
+  state = INITIAL_STATE
   componentDidMount() {
-    if (this.props.navigation.state.routeName === "statisticsWeekly") {
-      this.setupBarChartAnimatedWidth(
-        this.state.currentWeekIndex,
-        this.props.entryStore.getWeeklyStats(),
-      )
-    } else if (this.props.navigation.state.routeName === "statisticsMonthly") {
-      this.setupBarChartAnimatedWidth(
-        this.state.currentMonthIndex,
-        this.props.entryStore.getMonthlyStats(),
-      )
-    } else {
-      this.setupBarChartAnimatedWidth(
-        this.state.currentYearIndex,
-        this.props.entryStore.getYearlyStats(),
-      )
+    if (this._focusSubscription === undefined) {
+      this.loadChart()
+      this._focusSubscription = this.props.navigation.addListener("didFocus", this.loadChart)
     }
   }
+  componentWillUnmount() {
+    this._focusSubscription.remove()
+  }
+  resetState = () => {
+    this.setState({ chartLoaded: false })
+  }
+  loadChart = () => {
+    if (!this.state.chartLoaded || this.props.entryStore.newlyUpdatedEntry) {
+      if (this.props.navigation.state.routeName === "statisticsWeekly") {
+        this.setupBarChartAnimatedWidth(
+          this.state.currentWeekIndex,
+          this.props.entryStore.getWeeklyStats(),
+        )
+      } else if (this.props.navigation.state.routeName === "statisticsMonthly") {
+        this.setupBarChartAnimatedWidth(
+          this.state.currentMonthIndex,
+          this.props.entryStore.getMonthlyStats(),
+        )
+      } else {
+        this.setupBarChartAnimatedWidth(
+          this.state.currentYearIndex,
+          this.props.entryStore.getYearlyStats(),
+        )
+      }
+      this.props.entryStore.resetNewlyUpdatedEntry()
+    }
+    this.setState({ chartLoaded: true })
+  }
   setupBarChartAnimatedWidth = (currentIndex, statistics) => {
-    const largestNumber = Math.max(...Object.values(statistics[currentIndex]))
-    Object.entries(statistics[currentIndex]).forEach(entry => {
-      // Entries are in the form of ['cow', 1]
-      this.setState(
-        {
-          [`${entry[0]}${currentIndex}`]: new Animated.Value(0),
-        },
-        () => {
-          Animated.timing(this.state[`${entry[0]}${currentIndex}`], {
-            toValue: entry[1] * (200 / largestNumber),
-            duration: 1000,
-          }).start()
-        },
-      )
-    })
+    if (statistics[currentIndex]) {
+      const statValues = statistics[currentIndex].reduce((acc, currentValue) => {
+        acc.push(currentValue[1])
+        return acc
+      }, [])
+      const largestNumber = Math.max(...statValues)
+      statistics[currentIndex].forEach(entry => {
+        // Entries are in the form of ['cow', 1]
+        this.setState(
+          {
+            [`${entry[0]}${currentIndex}`]: new Animated.Value(0),
+          },
+          () => {
+            Animated.timing(this.state[`${entry[0]}${currentIndex}`], {
+              toValue: entry[1] * (200 / largestNumber),
+              duration: 1000,
+            }).start()
+          },
+        )
+      })
+    }
   }
   formatNumber = unformattedNumber => {
     // Round number to first decimal place
@@ -258,8 +285,8 @@ export class Statistics extends React.Component<StatisticsScreenProps, Statistic
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={BAR_CHART}>
-          {Object.entries(currentStatistics).length > 0 ? (
-            Object.entries(currentStatistics).map(entry => {
+          {currentStatistics.length > 0 ? (
+            currentStatistics.map(entry => {
               // Entries are in the form of ['cow', 1]
               return (
                 <View key={entry[0] + currentIndex} style={BAR_CHART_CELL}>
