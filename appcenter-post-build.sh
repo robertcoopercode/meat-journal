@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Running the post build script in the app center!"
+echo "Running the post build script in the app center!"gst
 
 # Upload directly to itunes connect
-if [ “$APPCENTER_BRANCH” == master ];
+if [ "$APPCENTER_BRANCH" == "master" ];
 then
     sudo gem install fastlane
     sudo gem install gh_inspector
