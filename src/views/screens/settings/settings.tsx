@@ -1,7 +1,6 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { View, ViewStyle, TouchableOpacity, TextStyle, Linking } from "react-native"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
 import { Text } from "src/views/shared/text"
 import { Screen } from "src/views/shared/screen"
@@ -10,6 +9,7 @@ import { NavigationScreenProps } from "react-navigation"
 import { translate } from "src/i18n"
 import { UserStoreModel } from "src/models/user-store"
 import { Button } from "src/views/shared/button"
+import { Icon } from "src/views/shared/icon"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -67,6 +67,8 @@ const SETTINGS_SAVE: ViewStyle = {
   marginTop: spacing[6],
 }
 
+const ROW_CHEVRON: ViewStyle = { transform: [{ rotateZ: "180deg" }] }
+
 export interface SettingsScreenProps extends NavigationScreenProps<{}> {
   userStore: typeof UserStoreModel.Type
 }
@@ -116,7 +118,7 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
           <Text preset="fieldLabel">{label}</Text>
           {value && <Text style={SETTINGS_DETAILS_VALUE}>{value}</Text>}
         </View>
-        <FontAwesomeIcon name="chevron-right" size={15} color={color.primary} />
+        <Icon icon="smallChevron" style={ROW_CHEVRON} />
       </View>
     </TouchableOpacity>
   )
