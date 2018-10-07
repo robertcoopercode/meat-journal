@@ -19,6 +19,8 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     increment_build_number(xcodeproj: "MeatJournal.xcodeproj")
+    # Get latest appstore certificate
+    match(type: 'appstore')
     build_app(scheme: "MeatJournal")
     upload_to_testflight
   end
