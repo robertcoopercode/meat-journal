@@ -1,3 +1,5 @@
+[![Build status](https://build.appcenter.ms/v0.1/apps/761af6a1-4a1f-4b25-acd9-1148ca6e3497/branches/master/badge)](https://appcenter.ms)
+
 # MeatJournal
 
 Food journalling application for those following the **Carnivore Diet** and only eat meat.
