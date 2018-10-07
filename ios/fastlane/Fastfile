@@ -24,4 +24,13 @@ platform :ios do
     build_app(scheme: "MeatJournal")
     upload_to_testflight
   end
+  lane :appcenterPost do |options|
+    increment_build_number(xcodeproj: "MeatJournal.xcodeproj")
+    # Get latest appstore certificate
+    match(type: 'appstore')
+    build_app(scheme: "MeatJournal")
+    ENV[‘FASTLANE_PASSWORD’] = options[:password]
+    ENV[‘FASTLANE_USERNAME’] = options[:user]
+    upload_to_testflight(ipa: options[:ipa])
+  end
 end
