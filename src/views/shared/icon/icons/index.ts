@@ -16,6 +16,8 @@ export const icons = {
   shellfish: require("./shellfish.png"),
   turkey: require("./turkey.png"),
   delete: require("./delete.png"),
+  smallChevron: require("./small-chevron-primary.png"),
+  largeChevron: require("./large-chevron-white.png"),
 }
 
 export type IconTypes = keyof typeof icons

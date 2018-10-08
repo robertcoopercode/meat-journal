@@ -7,6 +7,7 @@ import { inject, observer } from "mobx-react"
 import { AddEntryButton, ADD_ENTRY_CONTAINER_HEIGHT } from "src/views/shared/add-entry-button"
 import { EntryGroup } from "src/views/shared/entry-group"
 import { EntryStoreModel } from "src/models/entry-store"
+import { Icon } from "src/views/shared/icon"
 import { Screen } from "src/views/shared/screen"
 import { color } from "src/theme"
 import { createDashedDate, dashedDateFormatConversion } from "src/lib/utility"
@@ -15,6 +16,13 @@ const ROOT: ViewStyle = {
   backgroundColor: color.background,
   paddingBottom: ADD_ENTRY_CONTAINER_HEIGHT,
 }
+
+const ArrowComponent = ({ direction }) => (
+  <Icon
+    icon="smallChevron"
+    style={direction === "right" ? { transform: [{ rotateZ: "180deg" }] } : null}
+  />
+)
 
 export interface LogbookCalendarScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
@@ -69,6 +77,7 @@ export class LogbookCalendar extends React.Component<
               }}
               markedDates={markedDates}
               onDayPress={this.handleDaySelection}
+              renderArrow={direction => <ArrowComponent direction={direction} />}
             />
             {selectedDateEntries.length > 0 && (
               <EntryGroup
