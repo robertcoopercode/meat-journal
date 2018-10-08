@@ -8,6 +8,7 @@ import {
   ViewStyle,
   ScrollView,
   Dimensions,
+  AlertIOS,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import format from "date-fns/format"
@@ -200,8 +201,21 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({ openedDatePicker: false })
   }
   handleDeleteEntry = () => {
-    this.props.entryStore.delete(this.props.navigation.state.params.entry)
-    this.props.navigation.goBack()
+    AlertIOS.alert("Deleting Entry", "The entry will be permanently deleted", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          this.props.entryStore.delete(this.props.navigation.state.params.entry)
+          this.props.navigation.goBack()
+        },
+        style: "destructive",
+      },
+    ])
   }
   handleSubmit = () => {
     const errors = this.validateFields()
