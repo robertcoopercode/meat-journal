@@ -147,9 +147,9 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
             label: translate("settings.privacyPolicy"),
             handler: () => this.props.navigation.navigate("privacyPolicy"),
           })}
-          {this.renderSettingsRow({
+          {/* {this.renderSettingsRow({
             label: translate("settings.termsOfService"),
-          })}
+          })} */}
           {this.renderSettingsRow({
             label: translate("settings.contactUs"),
             handler: this.handleOpenEmail,
