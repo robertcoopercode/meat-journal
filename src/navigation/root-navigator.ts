@@ -108,7 +108,7 @@ export const RootNavigator = createStackNavigator(
     mainAppNavigation: { screen: mainAppNavigation },
     entryModal: {
       screen: EntryModal,
-      navigationOptions: { header: null },
+      navigationOptions: { header: null, gesturesEnabled: true },
     },
   },
   {
@@ -119,6 +119,9 @@ export const RootNavigator = createStackNavigator(
       opacity: 1,
     },
     transitionConfig: forVertical,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
   },
 )
 
