@@ -2,7 +2,6 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { Animated, View, ViewStyle, TouchableOpacity, ScrollView, TextStyle } from "react-native"
 import Ionicons from "react-native-vector-icons/Ionicons"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
 import { Icon } from "src/views/shared/icon"
 import { Text } from "src/views/shared/text"
@@ -33,6 +32,7 @@ const BAR_CHART: ViewStyle = {
   alignItems: "flex-start",
   minWidth: "100%",
   paddingHorizontal: spacing[5],
+  paddingBottom: spacing[5],
 }
 
 const BAR_CHART_CELL: ViewStyle = {
@@ -40,7 +40,6 @@ const BAR_CHART_CELL: ViewStyle = {
 }
 
 const BAR_CHART_CELL_VALUE: TextStyle = {
-  // color: color.secondary,
   marginLeft: spacing[2],
   fontWeight: "500",
 }
