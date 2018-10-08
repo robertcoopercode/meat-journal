@@ -26,3 +26,5 @@ export type supportedAnimalsTypes =
   | "kangaroo"
   | "shellfish"
   | "turkey"
+
+export const LBS_IN_KGS = 2.20462

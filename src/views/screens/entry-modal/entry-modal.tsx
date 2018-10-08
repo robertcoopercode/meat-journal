@@ -8,6 +8,7 @@ import {
   ViewStyle,
   ScrollView,
   Dimensions,
+  AlertIOS,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import format from "date-fns/format"
@@ -23,6 +24,7 @@ import { TextField } from "src/views/shared/text-field"
 import { color, spacing } from "src/theme"
 import { Icon } from "src/views/shared/icon"
 import { UserStoreModel } from "src/models/user-store"
+import { convertKgsToLbs, convertLbsToKgs } from "src/lib/utility"
 
 const ROOT: ViewStyle = {
   backgroundColor: "rgba(0,0,0, 0.6)",
@@ -96,7 +98,8 @@ interface EntryModalScreenState {
   openedDatePicker: boolean
   openedTimePicker: boolean
   time: string
-  weight: string
+  weightKgs: string
+  weightLbs: string
   filteredAnimalTypes: string[]
   errors:
     | {}
@@ -134,7 +137,8 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     openedDatePicker: false,
     openedTimePicker: false,
     time: format(new Date(), "h:mm A"),
-    weight: null,
+    weightKgs: null,
+    weightLbs: null,
     filteredAnimalTypes: SUPPORTED_ANIMALS,
     errors: {},
     beforeUpdateEntryDetails: {},
@@ -156,18 +160,15 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
   componentDidMount() {
     if (this.props.navigation.getParam("type", "add") === "edit") {
       const { id, name, animalType, date, time } = this.props.navigation.state.params.entry
-      let weight
-      if (this.props.userStore.weightUnits === "kgs") {
-        weight = this.props.navigation.state.params.entry.weightKgs.toString()
-      } else {
-        weight = this.props.navigation.state.params.entry.weightLbs.toString()
-      }
+      const weightKgs = this.props.navigation.state.params.entry.weightKgs.toString()
+      const weightLbs = this.props.navigation.state.params.entry.weightLbs.toString()
       this.setState({
         name,
         animalType,
         date,
         time,
-        weight,
+        weightKgs,
+        weightLbs,
         beforeUpdateEntryDetails: { date, id },
       })
     }
@@ -176,11 +177,16 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.inputs[inputName] = input
   }
   validateFields = () => {
-    const errors = {}
+    const errors: {
+      animalType?: string
+      weight?: string
+      name?: string
+    } = {}
+
     if (!SUPPORTED_ANIMALS.includes(this.state.animalType.toLocaleLowerCase())) {
       errors.animalType = "Not an available animal type"
     }
-    if (isNaN(parseFloat(this.state.weight))) {
+    if (isNaN(parseFloat(this.state.weightLbs)) || isNaN(parseFloat(this.state.weightKgs))) {
       errors.weight = "Not a valid number"
     }
     if (!Boolean(this.state.name.trim())) {
@@ -195,8 +201,21 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     this.setState({ openedDatePicker: false })
   }
   handleDeleteEntry = () => {
-    this.props.entryStore.delete(this.props.navigation.state.params.entry)
-    this.props.navigation.goBack()
+    AlertIOS.alert("Deleting Entry", "The entry will be permanently deleted", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          this.props.entryStore.delete(this.props.navigation.state.params.entry)
+          this.props.navigation.goBack()
+        },
+        style: "destructive",
+      },
+    ])
   }
   handleSubmit = () => {
     const errors = this.validateFields()
@@ -205,7 +224,8 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
         const entry = {
           animalType: this.state.animalType,
           name: this.state.name,
-          weight: this.state.weight,
+          weightKgs: this.state.weightKgs,
+          weightLbs: this.state.weightLbs,
           date: this.state.date,
           time: this.state.time,
         }
@@ -215,7 +235,8 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
           ...this.props.navigation.state.params.entry,
           animalType: this.state.animalType,
           name: this.state.name,
-          weight: this.state.weight,
+          weightKgs: this.state.weightKgs,
+          weightLbs: this.state.weightLbs,
           date: this.state.date,
           time: this.state.time,
         }
@@ -246,17 +267,42 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
   }
   handleWeightFieldChange = text => {
     let parsedNumber = parseFloat(text)
-    if (isNaN(text)) {
+    let weightUnits = this.props.userStore.weightUnits
+    if (isNaN(text) || parsedNumber > 100) {
       this.setState(state => ({
-        weight: state.weight,
+        weightKgs: state.weightKgs,
+        weightLbs: state.weightLbs,
         errors: {},
       }))
-    } else if (parsedNumber > 100) {
     } else if (text.includes(".") && text.split(".")[1].length > 2) {
       parsedNumber = Math.round(parsedNumber * 100) / 100
-      return this.setState({ weight: parsedNumber.toString(), errors: {} })
+      if (weightUnits === "kgs") {
+        return this.setState({
+          weightKgs: parsedNumber.toString(),
+          weightLbs: convertKgsToLbs(parsedNumber).toString(),
+          errors: {},
+        })
+      } else {
+        return this.setState({
+          weightKgs: convertLbsToKgs(parsedNumber).toString(),
+          weightLbs: parsedNumber.toString(),
+          errors: {},
+        })
+      }
     }
-    return this.setState({ weight: text, errors: {} })
+    if (weightUnits === "kgs") {
+      return this.setState({
+        weightKgs: text,
+        weightLbs: convertLbsToKgs(parsedNumber).toString(),
+        errors: {},
+      })
+    } else {
+      return this.setState({
+        weightKgs: convertLbsToKgs(parsedNumber).toString(),
+        weightLbs: text,
+        errors: {},
+      })
+    }
   }
   renderFilteredAnimalTypes = () => {
     return this.state.filteredAnimalTypes.map(animalType => (
@@ -352,10 +398,18 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
                 )}
                 <View style={FORM_FIELD_CONTAINER}>
                   <TextField
-                    labelTx={"entryModal.weightField"}
+                    labelTx={
+                      this.props.userStore.weightUnits === "kgs"
+                        ? "entryModal.weightFieldKgs"
+                        : "entryModal.weightFieldLbs"
+                    }
                     setRef={this.setInputRef("weight")}
                     keyboardType={"numeric"}
-                    value={this.state.weight}
+                    value={
+                      this.props.userStore.weightUnits === "kgs"
+                        ? this.state.weightKgs
+                        : this.state.weightLbs
+                    }
                     onChangeText={this.handleWeightFieldChange}
                   />
                   {this.state.errors &&

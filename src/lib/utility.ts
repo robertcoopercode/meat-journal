@@ -12,6 +12,7 @@ import isSameYearFns from "date-fns/is_same_year"
 import startOfMonthFns from "date-fns/start_of_month"
 import startOfWeekFns from "date-fns/start_of_week"
 import startOfYearFns from "date-fns/start_of_year"
+import { LBS_IN_KGS } from "./constants"
 
 export const differenceInWeeks = (start, end) => {
   return differenceInWeeksFns(start, end)
@@ -116,3 +117,7 @@ export const getYearRangeText = yearsFromThisYear => {
   const formattedYear = formatFns(month, "YYYY")
   return formattedYear
 }
+
+export const convertLbsToKgs = weightInLbs => Math.round(weightInLbs / LBS_IN_KGS * 100) / 100
+
+export const convertKgsToLbs = weightInKgs => Math.round(weightInKgs * LBS_IN_KGS * 100) / 100
