@@ -17,13 +17,12 @@ const ROOT: ViewStyle = {
   paddingBottom: ADD_ENTRY_CONTAINER_HEIGHT,
 }
 
-const ArrowComponent = ({ direction }) =>
-  console.tron.log(direction) || (
-    <Icon
-      icon="smallChevron"
-      style={direction === "right" ? { transform: [{ rotateZ: "180deg" }] } : null}
-    />
-  )
+const ArrowComponent = ({ direction }) => (
+  <Icon
+    icon="smallChevron"
+    style={direction === "right" ? { transform: [{ rotateZ: "180deg" }] } : null}
+  />
+)
 
 export interface LogbookCalendarScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
