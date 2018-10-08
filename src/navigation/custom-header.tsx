@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StatusBar, TouchableOpacity, View, ViewStyle, TextStyle } from "react-native"
 import { NavigationScreenProps, SafeAreaView } from "react-navigation"
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
+import { Icon } from "src/views/shared/icon"
 
 import { Text } from "src/views/shared/text"
 import { color, spacing } from "src/theme"
@@ -156,7 +156,7 @@ const SETTINGS_HEADER_ROW: ViewStyle = {
   alignItems: "center",
 }
 
-const SETTINGS_HEADER_TITLE: TextStyle = { marginLeft: spacing[3], color: color.palette.white }
+const SETTINGS_HEADER_TITLE: TextStyle = { marginLeft: spacing[4], color: color.palette.white }
 
 export function SettingsHeader(props: SreenHeaderProps) {
   return (
@@ -164,9 +164,9 @@ export function SettingsHeader(props: SreenHeaderProps) {
       <StatusBar barStyle="light-content" />
       <View style={SETTINGS_HEADER_ROW}>
         <TouchableOpacity onPress={() => props.navigation.pop()}>
-          <FontAwesomeIcon name="chevron-left" size={20} color={color.palette.white} />
+          <Icon icon="largeChevron" />
         </TouchableOpacity>
-        <Text preset="header" style={SETTINGS_HEADER_TITLE} tx="settings.title" />
+        <Text style={SETTINGS_HEADER_TITLE} tx="settings.title" />
       </View>
     </SafeAreaView>
   )

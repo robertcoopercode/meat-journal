@@ -1,14 +1,29 @@
-import format from "date-fns/format"
-import startOfWeek from "date-fns/start_of_week"
-import isSameWeekFns from "date-fns/is_same_week"
-import isSameMonthFns from "date-fns/is_same_month"
-import isSameYearFns from "date-fns/is_same_year"
-import addWeeksFns from "date-fns/add_weeks"
 import addMonthsFns from "date-fns/add_months"
+import addWeeksFns from "date-fns/add_weeks"
 import addYearsFns from "date-fns/add_years"
-import endOfWeek from "date-fns/end_of_week"
+import differenceInMonthsFns from "date-fns/difference_in_months"
+import differenceInWeeksFns from "date-fns/difference_in_weeks"
+import differenceInYearsFns from "date-fns/difference_in_years"
+import endOfWeekFns from "date-fns/end_of_week"
+import formatFns from "date-fns/format"
+import isSameMonthFns from "date-fns/is_same_month"
+import isSameWeekFns from "date-fns/is_same_week"
+import isSameYearFns from "date-fns/is_same_year"
 import startOfMonthFns from "date-fns/start_of_month"
+import startOfWeekFns from "date-fns/start_of_week"
 import startOfYearFns from "date-fns/start_of_year"
+
+export const differenceInWeeks = (start, end) => {
+  return differenceInWeeksFns(start, end)
+}
+
+export const differenceInMonths = (start, end) => {
+  return differenceInMonthsFns(start, end)
+}
+
+export const differenceInYears = (start, end) => {
+  return differenceInYearsFns(start, end)
+}
 
 export const uniqueId = () => {
   function s4() {
@@ -20,7 +35,7 @@ export const uniqueId = () => {
 }
 
 export const formatDate = unformattedDate => {
-  return format(createJSDate(unformattedDate), "MMMM D")
+  return formatFns(createJSDate(unformattedDate), "MMMM D")
 }
 
 export const createJSDate = unformattedDate => {
@@ -31,23 +46,23 @@ export const createJSDate = unformattedDate => {
 }
 
 export const dashedDateFormatConversion = date => {
-  return format(createJSDate(date), "YYYY-MM-DD")
+  return formatFns(createJSDate(date), "YYYY-MM-DD")
 }
 
 export const convertDashedDateToSlashedDate = dashedDate => {
-  return format(dashedDate, "DD/MM/YYYY")
+  return formatFns(dashedDate, "DD/MM/YYYY")
 }
 
 export const createDashedDate = date => {
-  return format(date, "YYYY-MM-DD")
+  return formatFns(date, "YYYY-MM-DD")
 }
 
 export const createIsoFormattedDate = date => {
-  return format(date, "MM/DD/YYYY")
+  return formatFns(date, "MM/DD/YYYY")
 }
 
 export const getStartOfWeek = date => {
-  return startOfWeek(date, { weekStartsOn: 1 }) // Week starts on Monday
+  return startOfWeekFns(date, { weekStartsOn: 1 }) // Week starts on Monday
 }
 
 export const getStartOfMonth = date => {
@@ -83,21 +98,21 @@ export const addYear = (date, amount) => {
 }
 
 export const getWeekRangeText = weeksFromThisWeek => {
-  const start = addWeeksFns(startOfWeek(new Date(), { weekStartsOn: 1 }), -1 * weeksFromThisWeek)
-  const end = endOfWeek(start, { weekStartsOn: 1 })
-  const formattedStart = format(start, "MMM D")
-  const formattedEnd = format(end, "MMM D")
+  const start = addWeeksFns(startOfWeekFns(new Date(), { weekStartsOn: 1 }), -1 * weeksFromThisWeek)
+  const end = endOfWeekFns(start, { weekStartsOn: 1 })
+  const formattedStart = formatFns(start, "MMM D")
+  const formattedEnd = formatFns(end, "MMM D")
   return `${formattedStart} - ${formattedEnd}`
 }
 
 export const getMonthRangeText = monthsFromThisMonth => {
   const month = addMonthsFns(new Date(), -1 * monthsFromThisMonth)
-  const formattedMonth = format(month, "MMMM YYYY")
+  const formattedMonth = formatFns(month, "MMMM YYYY")
   return formattedMonth
 }
 
 export const getYearRangeText = yearsFromThisYear => {
   const month = addYearsFns(new Date(), -1 * yearsFromThisYear)
-  const formattedYear = format(month, "YYYY")
+  const formattedYear = formatFns(month, "YYYY")
   return formattedYear
 }

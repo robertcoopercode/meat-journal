@@ -1,26 +1,7 @@
 import { types } from "mobx-state-tree"
 import isBefore from "date-fns/is_before"
-import {
-  createJSDate,
-  createIsoFormattedDate,
-  uniqueId,
-  getStartOfWeek,
-  getStartOfMonth,
-  getStartOfYear,
-  convertDashedDateToSlashedDate,
-  dashedDateFormatConversion,
-  isSameWeek,
-  isSameMonth,
-  isSameYear,
-  addWeek,
-  addMonth,
-  addYear,
-} from "src/lib/utility"
+import * as Utility from "src/lib/utility"
 import format from "date-fns/format"
-import differenceInWeeks from "date-fns/difference_in_weeks"
-import differenceInMonths from "date-fns/difference_in_months"
-import differenceInYears from "date-fns/difference_in_years"
-import parse from "date-fns/parse"
 
 export const Entry = types.model("Entry", {
   id: types.string,
@@ -42,7 +23,7 @@ const DateEntry = types
   .actions(self => ({
     addEntry(entry) {
       self.data.push({
-        id: uniqueId(),
+        id: Utility.uniqueId(),
         animalType: entry.animalType,
         name: entry.name,
         dateTimestamp: Date.now(),
@@ -53,21 +34,6 @@ const DateEntry = types
       })
       self.data = self.data.sort(timeComparison)
     },
-    // updateEntry(entry) {
-    //   self.data = self.data.map(item => {
-    //     if (item.id === entry.id) {
-    //       let updatedEntry = {
-    //         ...entry,
-    //         dateTimestamp: Date.now(),
-    //         weightLbs: parseFloat(entry.weight),
-    //         weightKgs: parseFloat(entry.weight),
-    //       }
-    //       return updatedEntry
-    //     }
-    //     return item
-    //   })
-    //   self.data = self.data.sort(timeComparison)
-    // },
     deleteEntry(id) {
       self.data = self.data.filter(item => item.id !== id)
     },
@@ -93,7 +59,7 @@ export const EntryStoreModel = types
             date: entry.date,
             data: [
               {
-                id: uniqueId(),
+                id: Utility.uniqueId(),
                 animalType: entry.animalType,
                 name: entry.name,
                 dateTimestamp: Date.now(),
@@ -113,7 +79,7 @@ export const EntryStoreModel = types
     },
     update(previousEntry, entry) {
       self.entries.some(storeDateEntry => {
-        // First delete the previous entry
+        // Delete the old entry
         if (storeDateEntry.date === previousEntry.date) {
           storeDateEntry.deleteEntry(previousEntry.id)
           return true
@@ -122,7 +88,7 @@ export const EntryStoreModel = types
       })
       // Remove any date groups that no longer have entries
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
-      // Add back the entry with the updated values
+      // Add a new entry with updated values
       const dateAllreadyExists = self.entries.some(storeDateEntry => {
         if (entry.date === storeDateEntry.date) {
           storeDateEntry.addEntry(entry)
@@ -135,7 +101,7 @@ export const EntryStoreModel = types
             date: entry.date,
             data: [
               {
-                id: uniqueId(),
+                id: Utility.uniqueId(),
                 animalType: entry.animalType,
                 name: entry.name,
                 dateTimestamp: Date.now(),
@@ -151,16 +117,6 @@ export const EntryStoreModel = types
       }
       self.newlyUpdatedEntry = true
       return (self.entries = self.entries.sort(dateComparison))
-
-      // self.entries.some(storeDateEntry => {
-      //   if (storeDateEntry.date === entry.date) {
-      //     storeDateEntry.updateEntry(entry)
-      //     return true
-      //   }
-      //   return false
-      // })
-      // self.entries = self.entries.sort(dateComparison)
-      // return
     },
     delete(entry) {
       self.entries.some(storeDateEntry => {
@@ -174,7 +130,7 @@ export const EntryStoreModel = types
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
     },
     selectDay(day) {
-      const selectedDate = convertDashedDateToSlashedDate(day.dateString)
+      const selectedDate = Utility.convertDashedDateToSlashedDate(day.dateString)
       self.entries.forEach(entry => {
         if (entry.date !== selectedDate) {
           entry.selected = false
@@ -196,116 +152,76 @@ export const EntryStoreModel = types
   }))
   .views(self => ({
     getDateEntries(date) {
-      return self.entries.filter(entry => dashedDateFormatConversion(entry.date) === date)
+      return self.entries.filter(entry => Utility.dashedDateFormatConversion(entry.date) === date)
     },
     getWeeklyStats() {
-      const weekStats = [{}]
-      let startOfWeek = getStartOfWeek(new Date())
-      self.entries.forEach(entry => {
-        let entryAdded = false
-        while (weekStats.length < 30 && !entryAdded) {
-          if (isSameWeek(startOfWeek, createJSDate(entry.date))) {
-            const currentWeekIndex = Math.abs(
-              differenceInWeeks(startOfWeek, getStartOfWeek(new Date())),
-            )
-            if (weekStats[currentWeekIndex]) {
-              entry.data.forEach(item => {
-                if (weekStats[currentWeekIndex][item.animalType]) {
-                  weekStats[currentWeekIndex][item.animalType] =
-                    weekStats[currentWeekIndex][item.animalType] + item.weightKgs
-                } else {
-                  weekStats[currentWeekIndex][item.animalType] = item.weightKgs
-                }
-              })
-            }
-            entryAdded = true
-          } else {
-            startOfWeek = setNewStartOfWeek(startOfWeek)
-            weekStats.push({})
-          }
-        }
-      })
-      const sortedWeekStats = weekStats.map(stat => {
-        return Object.entries(stat).sort(statisticsComparion)
-      })
-      return sortedWeekStats
+      return getPeriodStats({ type: "week", entries: self.entries })
     },
     getMonthlyStats() {
-      const monthStats = [{}]
-      let startOfMonth = getStartOfMonth(new Date())
-      self.entries.forEach(entry => {
-        let entryAdded = false
-        while (monthStats.length < 30 && !entryAdded) {
-          if (isSameMonth(startOfMonth, createJSDate(entry.date))) {
-            const currentMonthIndex = Math.abs(
-              differenceInMonths(startOfMonth, getStartOfMonth(new Date())),
-            )
-            if (monthStats[currentMonthIndex]) {
-              entry.data.forEach(item => {
-                if (monthStats[currentMonthIndex][item.animalType]) {
-                  monthStats[currentMonthIndex][item.animalType] =
-                    monthStats[currentMonthIndex][item.animalType] + item.weightKgs
-                } else {
-                  monthStats[currentMonthIndex][item.animalType] = item.weightKgs
-                }
-              })
-            }
-            entryAdded = true
-          } else {
-            startOfMonth = setNewStartOfMonth(startOfMonth)
-            monthStats.push({})
-          }
-        }
-      })
-      const sortedMonthStats = monthStats.map(stat => {
-        return Object.entries(stat).sort(statisticsComparion)
-      })
-      return sortedMonthStats
+      return getPeriodStats({ type: "month", entries: self.entries })
     },
     getYearlyStats() {
-      const yearStats = [{}]
-      let startOfYear = getStartOfYear(new Date())
-      self.entries.forEach(entry => {
-        let entryAdded = false
-        while (yearStats.length < 30 && !entryAdded) {
-          if (isSameYear(startOfYear, createJSDate(entry.date))) {
-            const currentYearIndex = Math.abs(
-              differenceInYears(startOfYear, getStartOfYear(new Date())),
-            )
-            if (yearStats[currentYearIndex]) {
-              entry.data.forEach(item => {
-                if (yearStats[currentYearIndex][item.animalType]) {
-                  yearStats[currentYearIndex][item.animalType] =
-                    yearStats[currentYearIndex][item.animalType] + item.weightKgs
-                } else {
-                  yearStats[currentYearIndex][item.animalType] = item.weightKgs
-                }
-              })
-            }
-            entryAdded = true
-          } else {
-            startOfYear = setNewStartOfYear(startOfYear)
-            yearStats.push({})
-          }
-        }
-      })
-      const sortedYearStats = yearStats.map(stat => {
-        return Object.entries(stat).sort(statisticsComparion)
-      })
-      return sortedYearStats
+      return getPeriodStats({ type: "year", entries: self.entries })
     },
   }))
 
-const setNewStartOfWeek = previousWeekStartDate => {
-  return addWeek(previousWeekStartDate, -1)
+type properties = {
+  type: "week" | "month" | "year"
+  entries: Array<typeof DateEntry.Type>
 }
 
-const setNewStartOfMonth = previousMonthStartDate => {
-  return addMonth(previousMonthStartDate, -1)
-}
-
-const setNewStartOfYear = previousYearStartDate => {
-  return addYear(previousYearStartDate, -1)
+const getPeriodStats = (properties: properties) => {
+  let getStartOfPeriod, isSamePeriod, differenceBetweenPeriods, addPeriod
+  switch (properties.type) {
+    case "week":
+      getStartOfPeriod = Utility.getStartOfWeek
+      addPeriod = Utility.addWeek
+      isSamePeriod = Utility.isSameWeek
+      differenceBetweenPeriods = Utility.differenceInWeeks
+      break
+    case "month":
+      getStartOfPeriod = Utility.getStartOfMonth
+      addPeriod = Utility.addMonth
+      isSamePeriod = Utility.isSameMonth
+      differenceBetweenPeriods = Utility.differenceInMonths
+      break
+    case "year":
+      getStartOfPeriod = Utility.getStartOfYear
+      addPeriod = Utility.addYear
+      isSamePeriod = Utility.isSameYear
+      differenceBetweenPeriods = Utility.differenceInYears
+      break
+  }
+  const periodStats = [{}]
+  let startOfPeriod = getStartOfPeriod(new Date())
+  properties.entries.forEach(entry => {
+    let entryAdded = false
+    while (periodStats.length < 30 && !entryAdded) {
+      if (isSamePeriod(startOfPeriod, Utility.createJSDate(entry.date))) {
+        const currentPeriodIndex = Math.abs(
+          differenceBetweenPeriods(startOfPeriod, getStartOfPeriod(new Date())),
+        )
+        if (periodStats[currentPeriodIndex]) {
+          entry.data.forEach(item => {
+            if (periodStats[currentPeriodIndex][item.animalType]) {
+              periodStats[currentPeriodIndex][item.animalType] =
+                periodStats[currentPeriodIndex][item.animalType] + item.weightKgs
+            } else {
+              periodStats[currentPeriodIndex][item.animalType] = item.weightKgs
+            }
+          })
+        }
+        entryAdded = true
+      } else {
+        startOfPeriod = addPeriod(startOfPeriod, -1)
+        periodStats.push({})
+      }
+    }
+  })
+  const sortedPeriodStats = periodStats.map(stat => {
+    return Object.entries(stat).sort(statisticsComparion)
+  })
+  return sortedPeriodStats
 }
 
 const statisticsComparion = (compareEntry1, compareEntry2) => {
@@ -317,7 +233,9 @@ const statisticsComparion = (compareEntry1, compareEntry2) => {
 }
 
 const dateComparison = (compareEntry1, compareEntry2) => {
-  if (isBefore(createJSDate(compareEntry1.date), createJSDate(compareEntry2.date))) {
+  if (
+    isBefore(Utility.createJSDate(compareEntry1.date), Utility.createJSDate(compareEntry2.date))
+  ) {
     return 1
   } else {
     return -1
@@ -325,8 +243,8 @@ const dateComparison = (compareEntry1, compareEntry2) => {
 }
 
 const timeComparison = (compareEntry1, compareEntry2) => {
-  const time1 = `${createIsoFormattedDate(new Date())} ${compareEntry1.time}`
-  const time2 = `${createIsoFormattedDate(new Date())} ${compareEntry2.time}`
+  const time1 = `${Utility.createIsoFormattedDate(new Date())} ${compareEntry1.time}`
+  const time2 = `${Utility.createIsoFormattedDate(new Date())} ${compareEntry2.time}`
   if (isBefore(time1, time2)) {
     return -1
   } else {

@@ -11,7 +11,7 @@ import format from "date-fns/format"
 export const RootStoreModel = types.model("RootStore").props({
   navigationStore: types.optional(NavigationStoreModel, {}),
   entryStore: types.optional(EntryStoreModel, {
-    entries: MOCK_ENTRIES,
+    entries: __DEV__ ? MOCK_ENTRIES : [], // Load mock entries during development
     selectedDate: format(Date.now(), "YYYY-MM-DD"),
     newlyUpdatedEntry: false,
   }),

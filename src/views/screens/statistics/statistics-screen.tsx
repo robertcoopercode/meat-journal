@@ -4,6 +4,7 @@ import { Animated, View, ViewStyle, TouchableOpacity, ScrollView, TextStyle } fr
 import Ionicons from "react-native-vector-icons/Ionicons"
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome"
 
+import { Icon } from "src/views/shared/icon"
 import { Text } from "src/views/shared/text"
 import { Screen } from "src/views/shared/screen"
 import { color, spacing } from "src/theme"
@@ -62,7 +63,7 @@ const SETTINGS_BUTTON_CONTAINER: ViewStyle = {
   width: "100%",
   alignItems: "flex-end",
   justifyContent: "center",
-  paddingHorizontal: spacing[5],
+  paddingRight: spacing[5],
 }
 
 const NO_ENTRIES_TEXT_CONTAINER: ViewStyle = {
@@ -269,19 +270,13 @@ export class Statistics extends React.Component<StatisticsScreenProps, Statistic
       <Screen style={ROOT} preset="fixed">
         <View style={BAR_CHART_CONTROLS}>
           <TouchableOpacity onPress={previousButtonHandler}>
-            <FontAwesomeIcon
-              name="chevron-left"
-              size={15}
-              color={currentIndex < statistics.length - 1 ? color.primary : color.transparent}
-            />
+            {currentIndex < statistics.length - 1 && <Icon icon="smallChevron" />}
           </TouchableOpacity>
           <Text preset="fieldLabel">{chartTitle}</Text>
           <TouchableOpacity onPress={nextButtonHandler}>
-            <FontAwesomeIcon
-              name="chevron-right"
-              size={15}
-              color={currentIndex > 0 ? color.primary : color.transparent}
-            />
+            {currentIndex > 0 && (
+              <Icon icon="smallChevron" style={{ transform: [{ rotateZ: "180deg" }] }} />
+            )}
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={BAR_CHART}>
