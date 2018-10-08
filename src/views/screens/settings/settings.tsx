@@ -75,6 +75,7 @@ export interface SettingsScreenProps extends NavigationScreenProps<{}> {
 
 interface SettingsScreenState {}
 
+// @inject("navigationStore")
 @inject("userStore")
 @observer
 export class Settings extends React.Component<SettingsScreenProps, SettingsScreenState> {
@@ -144,6 +145,7 @@ export class Settings extends React.Component<SettingsScreenProps, SettingsScree
         <View style={BORING_SETTINGS}>
           {this.renderSettingsRow({
             label: translate("settings.privacyPolicy"),
+            handler: () => this.props.navigation.navigate("privacyPolicy"),
           })}
           {this.renderSettingsRow({
             label: translate("settings.termsOfService"),

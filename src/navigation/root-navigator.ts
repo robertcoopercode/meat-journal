@@ -1,4 +1,5 @@
 import { createStackNavigator, createBottomTabNavigator } from "react-navigation"
+import { PrivacyPolicy } from "../views/screens/PrivacyPolicy/PrivacyPolicy-screen"
 
 import { EntryModal } from "src/views/screens/entry-modal"
 import { LogbookCalendar } from "src/views/screens/logbook-calendar"
@@ -38,15 +39,29 @@ const LogbookNavigator = createStackNavigator(
   },
 )
 
+const SettingsNavigator = createStackNavigator(
+  {
+    settings: {
+      screen: Settings,
+    },
+    privacyPolicy: { screen: PrivacyPolicy },
+  },
+  {
+    navigationOptions: {
+      header: SettingsHeader,
+    },
+  },
+)
+
 const StatisticsAndSettingsNavigator = createStackNavigator(
   {
     statisticsWeekly: { screen: Statistics },
     statisticsMonthly: { screen: Statistics },
     statisticsYearly: { screen: Statistics },
     settingsScreen: {
-      screen: Settings,
+      screen: SettingsNavigator,
       navigationOptions: {
-        header: SettingsHeader,
+        header: null,
       },
     },
   },
