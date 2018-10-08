@@ -29,7 +29,9 @@
     "header": "LOGBOOK CALENDAR"
   },
   "statistics": {
-    "header": "STATISTICS"
+    "header": "STATISTICS",
+    "weightConsumedLbs": "Weight Consumed (lbs)",
+    "weightConsumedKgs": "Weight Consumed (kgs)"
   },
   "entryModal": {
     "addEntry": "Add Entry",

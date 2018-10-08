@@ -154,20 +154,21 @@ export const EntryStoreModel = types
     getDateEntries(date) {
       return self.entries.filter(entry => Utility.dashedDateFormatConversion(entry.date) === date)
     },
-    getWeeklyStats() {
-      return getPeriodStats({ type: "week", entries: self.entries })
+    getWeeklyStats(weightUnits) {
+      return getPeriodStats({ type: "week", entries: self.entries, weightUnits })
     },
-    getMonthlyStats() {
-      return getPeriodStats({ type: "month", entries: self.entries })
+    getMonthlyStats(weightUnits) {
+      return getPeriodStats({ type: "month", entries: self.entries, weightUnits })
     },
-    getYearlyStats() {
-      return getPeriodStats({ type: "year", entries: self.entries })
+    getYearlyStats(weightUnits) {
+      return getPeriodStats({ type: "year", entries: self.entries, weightUnits })
     },
   }))
 
 type properties = {
   type: "week" | "month" | "year"
   entries: Array<typeof DateEntry.Type>
+  weightUnits: "kgs" | "lbs"
 }
 
 const getPeriodStats = (properties: properties) => {
@@ -203,11 +204,12 @@ const getPeriodStats = (properties: properties) => {
         )
         if (periodStats[currentPeriodIndex]) {
           entry.data.forEach(item => {
+            const weight = properties.weightUnits === "kgs" ? item.weightKgs : item.weightLbs
             if (periodStats[currentPeriodIndex][item.animalType]) {
               periodStats[currentPeriodIndex][item.animalType] =
-                periodStats[currentPeriodIndex][item.animalType] + item.weightKgs
+                periodStats[currentPeriodIndex][item.animalType] + weight
             } else {
-              periodStats[currentPeriodIndex][item.animalType] = item.weightKgs
+              periodStats[currentPeriodIndex][item.animalType] = weight
             }
           })
         }
