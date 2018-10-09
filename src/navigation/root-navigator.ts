@@ -11,9 +11,6 @@ import { Welcome } from "src/views/screens/welcome"
 import { Settings } from "src/views/screens/settings"
 import { color } from "src/theme/color"
 
-// Use this to view the screens that came with the boilerplate
-// import { ExampleNavigator } from "./example-navigator"
-
 const logbookScreenNavigator = createStackNavigator(
   {
     logbookList: {
