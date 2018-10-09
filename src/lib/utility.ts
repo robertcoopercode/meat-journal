@@ -46,8 +46,8 @@ export const createJSDate = unformattedDate => {
   return new Date(year, month, day)
 }
 
-export const dashedDateFormatConversion = date => {
-  return formatFns(createJSDate(date), "YYYY-MM-DD")
+export const convertSlashedDateToDashedDate = slashedDate => {
+  return formatFns(createJSDate(slashedDate), "YYYY-MM-DD")
 }
 
 export const convertDashedDateToSlashedDate = dashedDate => {

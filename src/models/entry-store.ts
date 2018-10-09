@@ -46,6 +46,28 @@ export const EntryStoreModel = types
     newlyUpdatedEntry: types.boolean,
   })
   .actions(self => ({
+    selectDay(day) {
+      const selectedDate = Utility.convertDashedDateToSlashedDate(day.dateString)
+      self.entries.forEach(entry => {
+        if (entry.date !== selectedDate) {
+          entry.selected = false
+        } else {
+          entry.selected = true
+        }
+        return entry
+      })
+      self.selectedDate = day.dateString
+      return
+    },
+    resetSelectedDay() {
+      self.selectedDate = format(Date.now(), "YYYY-MM-DD")
+      self.entries.forEach(entry => (entry.selected = false))
+    },
+    resetNewlyUpdatedEntry() {
+      self.newlyUpdatedEntry = false
+    },
+  }))
+  .actions(self => ({
     add(entry) {
       const dateAllreadyExists = self.entries.some(storeDateEntry => {
         if (entry.date === storeDateEntry.date) {
@@ -73,6 +95,7 @@ export const EntryStoreModel = types
           }),
         )
       }
+      self.selectDay({ dateString: Utility.convertSlashedDateToDashedDate(entry.date) })
       self.newlyUpdatedEntry = true
       self.entries = self.entries.sort(dateComparison)
       return
@@ -129,30 +152,12 @@ export const EntryStoreModel = types
       self.newlyUpdatedEntry = true
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
     },
-    selectDay(day) {
-      const selectedDate = Utility.convertDashedDateToSlashedDate(day.dateString)
-      self.entries.forEach(entry => {
-        if (entry.date !== selectedDate) {
-          entry.selected = false
-        } else {
-          entry.selected = true
-        }
-        return entry
-      })
-      self.selectedDate = day.dateString
-      return
-    },
-    resetSelectedDay() {
-      self.selectedDate = format(Date.now(), "YYYY-MM-DD")
-      self.entries.forEach(entry => (entry.selected = false))
-    },
-    resetNewlyUpdatedEntry() {
-      self.newlyUpdatedEntry = false
-    },
   }))
   .views(self => ({
     getDateEntries(date) {
-      return self.entries.filter(entry => Utility.dashedDateFormatConversion(entry.date) === date)
+      return self.entries.filter(
+        entry => Utility.convertSlashedDateToDashedDate(entry.date) === date,
+      )
     },
     getWeeklyStats(weightUnits) {
       return getPeriodStats({ type: "week", entries: self.entries, weightUnits })
