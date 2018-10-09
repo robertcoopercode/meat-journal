@@ -50,22 +50,28 @@ const SettingsNavigator = createStackNavigator(
   },
 )
 
-const StatisticsAndSettingsNavigator = createStackNavigator(
+const StatisticsNavigator = createStackNavigator(
   {
     statisticsWeekly: { screen: Statistics },
     statisticsMonthly: { screen: Statistics },
     statisticsYearly: { screen: Statistics },
-    settingsScreen: {
-      screen: SettingsNavigator,
-      navigationOptions: {
-        header: null,
-      },
-    },
   },
   {
     navigationOptions: {
       header: StatisticsHeader,
     },
+  },
+)
+
+const StatisticsAndSettingsNavigator = createStackNavigator(
+  {
+    statisticScreens: { screen: StatisticsNavigator },
+    settingsScreen: {
+      screen: SettingsNavigator,
+    },
+  },
+  {
+    headerMode: "none",
   },
 )
 
