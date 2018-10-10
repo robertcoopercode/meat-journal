@@ -11,9 +11,6 @@ import { Welcome } from "src/views/screens/welcome"
 import { Settings } from "src/views/screens/settings"
 import { color } from "src/theme/color"
 
-// Use this to view the screens that came with the boilerplate
-// import { ExampleNavigator } from "./example-navigator"
-
 const logbookScreenNavigator = createStackNavigator(
   {
     logbookList: {
@@ -53,22 +50,28 @@ const SettingsNavigator = createStackNavigator(
   },
 )
 
-const StatisticsAndSettingsNavigator = createStackNavigator(
+const StatisticsNavigator = createStackNavigator(
   {
     statisticsWeekly: { screen: Statistics },
     statisticsMonthly: { screen: Statistics },
     statisticsYearly: { screen: Statistics },
-    settingsScreen: {
-      screen: SettingsNavigator,
-      navigationOptions: {
-        header: null,
-      },
-    },
   },
   {
     navigationOptions: {
       header: StatisticsHeader,
     },
+  },
+)
+
+const StatisticsAndSettingsNavigator = createStackNavigator(
+  {
+    statisticScreens: { screen: Statistics },
+    settingsScreen: {
+      screen: SettingsNavigator,
+    },
+  },
+  {
+    headerMode: "none",
   },
 )
 

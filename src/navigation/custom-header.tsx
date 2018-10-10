@@ -17,31 +17,32 @@ const MENU_ITEMS = {
   height: 60,
 }
 
-const MENU_ITEM = {
+export const MENU_ITEM = {
   height: 35,
   borderBottomWidth: 2,
   borderBottomColor: color.transparent,
 }
 
-const ACTIVE_MENU_ITEM = {
+export const ACTIVE_MENU_ITEM = {
   borderBottomColor: color.secondary,
 }
 
-const MENU_ITEM_TEXT = {
+export const MENU_ITEM_TEXT = {
   color: "#fff",
 }
 
-const ACTIVE_MENU_ITEM_TEXT = {
+export const ACTIVE_MENU_ITEM_TEXT = {
   color: color.secondary,
 }
 
 interface HeaderProps {
+  style?: ViewStyle
   renderMenuItems: () => React.ReactNode
 }
 
-function Header(props: HeaderProps) {
+export function Header(props: HeaderProps) {
   return (
-    <SafeAreaView style={HEADER}>
+    <SafeAreaView style={[HEADER, props.style ? props.style : {}]}>
       <StatusBar barStyle="light-content" />
       <View style={MENU_ITEMS}>{props.renderMenuItems()}</View>
     </SafeAreaView>
@@ -55,7 +56,7 @@ interface HeaderMenuItemProps {
   text: string
 }
 
-function HeaderMenuItem(props: HeaderMenuItemProps) {
+export function HeaderMenuItem(props: HeaderMenuItemProps) {
   return (
     <TouchableOpacity style={props.containerStyle} onPress={props.onPress}>
       <Text style={props.textStyle}>{props.text}</Text>
@@ -95,53 +96,6 @@ export function LogbookHeader(props: SreenHeaderProps) {
             }}
             onPress={() => props.navigation.navigate("logbookCalendar")}
             text="Calendar"
-          />
-        </React.Fragment>
-      )}
-    />
-  )
-}
-
-export function StatisticsHeader(props: SreenHeaderProps) {
-  return (
-    <Header
-      renderMenuItems={() => (
-        <React.Fragment>
-          <HeaderMenuItem
-            containerStyle={{
-              ...MENU_ITEM,
-              ...(props.scene.route.routeName === "statisticsWeekly" ? ACTIVE_MENU_ITEM : {}),
-            }}
-            textStyle={{
-              ...MENU_ITEM_TEXT,
-              ...(props.scene.route.routeName === "statisticsWeekly" ? ACTIVE_MENU_ITEM_TEXT : {}),
-            }}
-            onPress={() => props.navigation.navigate("statisticsWeekly")}
-            text="Weekly"
-          />
-          <HeaderMenuItem
-            containerStyle={{
-              ...MENU_ITEM,
-              ...(props.scene.route.routeName === "statisticsMonthly" ? ACTIVE_MENU_ITEM : {}),
-            }}
-            textStyle={{
-              ...MENU_ITEM_TEXT,
-              ...(props.scene.route.routeName === "statisticsMonthly" ? ACTIVE_MENU_ITEM_TEXT : {}),
-            }}
-            onPress={() => props.navigation.navigate("statisticsMonthly")}
-            text="Monthly"
-          />
-          <HeaderMenuItem
-            containerStyle={{
-              ...MENU_ITEM,
-              ...(props.scene.route.routeName === "statisticsYearly" ? ACTIVE_MENU_ITEM : {}),
-            }}
-            textStyle={{
-              ...MENU_ITEM_TEXT,
-              ...(props.scene.route.routeName === "statisticsYearly" ? ACTIVE_MENU_ITEM_TEXT : {}),
-            }}
-            onPress={() => props.navigation.navigate("statisticsYearly")}
-            text="Yearly"
           />
         </React.Fragment>
       )}

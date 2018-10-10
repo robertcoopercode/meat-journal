@@ -10,7 +10,7 @@ import { EntryStoreModel } from "src/models/entry-store"
 import { Icon } from "src/views/shared/icon"
 import { Screen } from "src/views/shared/screen"
 import { color } from "src/theme"
-import { createDashedDate, dashedDateFormatConversion } from "src/lib/utility"
+import { createDashedDate, convertSlashedDateToDashedDate } from "src/lib/utility"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.background,
@@ -47,7 +47,7 @@ export class LogbookCalendar extends React.Component<
     const selectedDateEntries = this.props.entryStore.entries.filter(entry => entry.selected)
     const markedDates = this.props.entryStore.entries
       .map(entry => {
-        let date = dashedDateFormatConversion(entry.date)
+        let date = convertSlashedDateToDashedDate(entry.date)
         return {
           [date]: {
             selected: entry.selected,
