@@ -65,7 +65,7 @@ const StatisticsNavigator = createStackNavigator(
 
 const StatisticsAndSettingsNavigator = createStackNavigator(
   {
-    statisticScreens: { screen: StatisticsNavigator },
+    statisticScreens: { screen: Statistics },
     settingsScreen: {
       screen: SettingsNavigator,
     },
