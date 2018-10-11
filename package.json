@@ -18,6 +18,7 @@
     "prepare": "npm-run-all patch hack:*",
     "run:ios": "react-native run-ios --simulator 'iPhone X'",
     "run:ios:small": "react-native run-ios --simulator 'iPhone SE'",
+    "run:ios:large": "react-native run-ios --simulator 'iPad Pro (12.9-inch) (2nd generation)'",
     "start": "env REACT_DEBUGGER=\"$([ -d '/Applications/React Native Debugger.app' ] && echo \"open 'rndebugger://set-debugger-loc?host=localhost&port=8081' --args\")\" node node_modules/react-native/local-cli/cli.js start",
     "storybook": "storybook start -p 9001 --skip-packager",
     "test": "jest"
