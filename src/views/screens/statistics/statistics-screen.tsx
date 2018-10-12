@@ -2,6 +2,7 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { Animated, View, ViewStyle, TouchableOpacity, ScrollView, TextStyle } from "react-native"
 import Ionicons from "react-native-vector-icons/Ionicons"
+import LinearGradient from "react-native-linear-gradient"
 
 import { Icon } from "src/views/shared/icon"
 import { Text } from "src/views/shared/text"
@@ -74,11 +75,13 @@ const BAR_CHART_CELL: ViewStyle = {
 }
 
 const BAR_CHART_CELL_VALUE: TextStyle = {
+  fontSize: 14,
   marginLeft: spacing[2],
   fontWeight: "500",
 }
 
 const BAR_CHART_CELL_LABEL: TextStyle = {
+  color: color.primary,
   paddingBottom: spacing[1],
   fontSize: 10,
   fontWeight: "700",
@@ -103,6 +106,8 @@ const NO_ENTRIES_TEXT_CONTAINER: ViewStyle = {
   width: "100%",
   alignItems: "center",
 }
+
+const BAR_CHART_GRADIENT: ViewStyle = { borderRadius: 10, height: 10, width: "100%" }
 
 const INITIAL_STATE = {
   period: "weekly",
@@ -391,13 +396,20 @@ export class Statistics extends React.Component<StatisticsScreenProps, Statistic
                       <View style={BAR_CHART_BAR_CONTAINER}>
                         <Animated.View
                           style={{
-                            height: 40,
+                            height: 10,
                             width: this.state[entry[0] + currentIndex],
-                            backgroundColor: color.primary,
+                            borderRadius: 10,
                             justifyContent: "center",
                             alignItems: "center",
                           }}
-                        />
+                        >
+                          <LinearGradient
+                            colors={[color.primary, color.tertiary]}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={BAR_CHART_GRADIENT}
+                          />
+                        </Animated.View>
                         <Text style={BAR_CHART_CELL_VALUE}>{this.formatNumber(entry[1])}</Text>
                       </View>
                     </View>
