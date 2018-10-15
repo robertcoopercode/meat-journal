@@ -1,6 +1,6 @@
 export const SUPPORTED_ANIMALS = [
   "cow",
-  "pork",
+  "porc",
   "duck",
   "horse",
   "lamb",
@@ -16,7 +16,7 @@ export const SUPPORTED_ANIMALS = [
 
 export type supportedAnimalsTypes =
   | "cow"
-  | "pork"
+  | "porc"
   | "duck"
   | "horse"
   | "lamb"
