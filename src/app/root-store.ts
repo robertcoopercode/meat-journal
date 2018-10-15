@@ -13,6 +13,7 @@ export const RootStoreModel = types.model("RootStore").props({
   entryStore: types.optional(EntryStoreModel, {
     entries: __DEV__ ? MOCK_ENTRIES : [], // Load mock entries during development
     selectedDate: format(Date.now(), "YYYY-MM-DD"),
+    sanitizedStoreVersion: 0,
     newlyUpdatedEntry: false,
   }),
   userStore: types.optional(UserStoreModel, { weightUnits: "lbs" }),
