@@ -1,14 +1,15 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import {
+  AlertIOS,
+  Dimensions,
+  KeyboardAvoidingView,
   SafeAreaView,
+  ScrollView,
   TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
-  ScrollView,
-  Dimensions,
-  AlertIOS,
 } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import format from "date-fns/format"
@@ -84,6 +85,22 @@ const ERROR_TEXT: TextStyle = {
 const FORM_FIELD_CONTAINER: ViewStyle = {
   position: "relative",
 }
+
+const MEAT_LIST: ViewStyle = {
+  maxHeight: 110,
+  position: "absolute",
+  width: "100%",
+  backgroundColor: "white",
+  borderBottomLeftRadius: 5,
+  borderBottomRightRadius: 5,
+  borderColor: color.palette.paleFlower,
+  borderWidth: 1,
+  borderTopWidth: 0,
+  paddingTop: spacing[1],
+  marginTop: -spacing[3] - spacing[2],
+}
+
+const MEAT_LIST_ITEM: ViewStyle = { paddingVertical: spacing[2], paddingHorizontal: spacing[3] }
 
 export interface EntryModalScreenProps extends NavigationScreenProps<{}> {
   entryStore: typeof EntryStoreModel.Type
@@ -308,7 +325,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
     return this.state.filteredAnimalTypes.map(animalType => (
       <TouchableOpacity
         key={animalType}
-        style={{ paddingVertical: spacing[4], paddingHorizontal: spacing[3] }}
+        style={MEAT_LIST_ITEM}
         onPress={() => this.handleAnimalFieldSelect(animalType)}
       >
         <Text>{animalType}</Text>
@@ -338,6 +355,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
               )}
             </View>
             <KeyboardAwareScrollView
+              extraScrollHeight={90}
               keyboardShouldPersistTaps={"always"}
               innerRef={ref => {
                 this.scroll = ref
@@ -376,22 +394,7 @@ export class EntryModal extends React.Component<EntryModalScreenProps, EntryModa
                 </View>
                 {this.state.animalFieldFocused && (
                   <View style={{ overflow: "visible", zIndex: 1 }}>
-                    <ScrollView
-                      keyboardShouldPersistTaps={"always"}
-                      style={{
-                        maxHeight: 185,
-                        position: "absolute",
-                        width: "100%",
-                        backgroundColor: "white",
-                        borderBottomLeftRadius: 5,
-                        borderBottomRightRadius: 5,
-                        borderColor: color.palette.paleFlower,
-                        borderWidth: 1,
-                        borderTopWidth: 0,
-                        paddingTop: spacing[2],
-                        marginTop: -spacing[3] - spacing[2],
-                      }}
-                    >
+                    <ScrollView keyboardShouldPersistTaps={"always"} style={MEAT_LIST}>
                       {this.renderFilteredAnimalTypes()}
                     </ScrollView>
                   </View>
