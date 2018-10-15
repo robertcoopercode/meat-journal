@@ -3,7 +3,6 @@ import { inject, observer } from "mobx-react"
 import {
   AlertIOS,
   Dimensions,
-  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
   TextStyle,

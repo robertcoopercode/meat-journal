@@ -14,6 +14,7 @@ export const icons = {
   kangaroo: require("./kangaroo.png"),
   shellfish: require("./shellfish.png"),
   turkey: require("./turkey.png"),
+  deer: require("./deer.png"),
   delete: require("./delete.png"),
   smallChevron: require("./small-chevron-primary.png"),
   largeChevron: require("./large-chevron-white.png"),

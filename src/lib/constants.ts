@@ -11,6 +11,7 @@ export const SUPPORTED_ANIMALS = [
   "kangaroo",
   "shellfish",
   "turkey",
+  "deer",
 ]
 
 export type supportedAnimalsTypes =
@@ -26,5 +27,6 @@ export type supportedAnimalsTypes =
   | "kangaroo"
   | "shellfish"
   | "turkey"
+  | "deer"
 
 export const LBS_IN_KGS = 2.20462
