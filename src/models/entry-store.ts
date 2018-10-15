@@ -44,6 +44,7 @@ export const EntryStoreModel = types
     entries: types.optional(types.array(DateEntry), []),
     selectedDate: types.string,
     newlyUpdatedEntry: types.boolean,
+    sanitizedStoreVersion: types.number, // This keeps track of if the store has been sanitized since the last time the app has been opened
   })
   .actions(self => ({
     selectDay(day) {
@@ -151,6 +152,19 @@ export const EntryStoreModel = types
       })
       self.newlyUpdatedEntry = true
       self.entries = self.entries.filter(storeDateEntry => storeDateEntry.data.length > 0)
+    },
+    sanitizeEntries() {
+      if (self.sanitizedStoreVersion < 1) {
+        // Fix improper spelling of "pork"
+        self.entries.map(dateEntry => {
+          dateEntry.data.map(entry => {
+            if (entry.animalType === "porc") {
+              entry.animalType = "pork"
+            }
+          })
+        })
+        self.sanitizedStoreVersion = 1
+      }
     },
   }))
   .views(self => ({

@@ -24,9 +24,15 @@ export class RootComponent extends React.Component<{}, RootComponentState> {
    */
   async componentDidMount() {
     SplashScreen.hide()
-    this.setState({
-      rootStore: await setupRootStore(),
-    })
+    const rootStore = await setupRootStore()
+    this.setState(
+      {
+        rootStore,
+      },
+      () => {
+        rootStore.entryStore.sanitizeEntries()
+      },
+    )
   }
 
   /**
