@@ -1,10 +1,9 @@
-[![Build status](https://build.appcenter.ms/v0.1/apps/761af6a1-4a1f-4b25-acd9-1148ca6e3497/branches/master/badge)](https://appcenter.ms)
+
+> Disclaimer: I can no longer get this project to run in XCode. Likely due to having the latest version of XCode installed on my machine and this project using an old version of React Native that is incompatible with the latest XCode. I'd probably have to update this project to the latest version of RN to get it to work again.
 
 # MeatJournal
 
 Food journalling application for those following the **Carnivore Diet** and only eat meat.
-
-> Disclaimer: I can no longer get this project to run in XCode. Likely due to having the latest version of XCode installed on my machine and this project using an old version of React Native that is incompatible with the latest XCode. I'd probably have to update this project to the latest version of RN to get it to work again.
 
 ## Tech Stack
 
