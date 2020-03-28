@@ -1,0 +1,62 @@
+{
+  "common": {
+    "ok": "OK!",
+    "cancel": "Cancel",
+    "back": "Back"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email address."
+  },
+  "firstExampleScreen": {
+    "poweredBy": "POWERED BY BOWSER",
+    "readyForLaunch": "Ready for launch.",
+    "continue": "CONTINUE"
+  },
+  "secondExampleScreen": {
+    "howTo": "HOW TO",
+    "title": "What’s In This Stack?",
+    "tagLine":
+      "Congratulations, you’ve got a very advanced React Native app template here.  Take advantage of this boilerplate!",
+    "reactotron": "Demo Reactotron"
+  },
+  "welcome": {
+    "title": "Meat Journal",
+    "description": "Keep track of the meat you eat",
+    "cta": "Get Started"
+  },
+  "logbookList": {},
+  "logbookCalendar": {
+    "header": "LOGBOOK CALENDAR"
+  },
+  "statistics": {
+    "header": "STATISTICS",
+    "weightConsumedLbs": "Weight Consumed (lbs)",
+    "weightConsumedKgs": "Weight Consumed (kgs)"
+  },
+  "entryModal": {
+    "addEntry": "Add Entry",
+    "editEntry": "Edit Entry",
+    "nameField": "Name",
+    "animalField": "Animal",
+    "weightFieldLbs": "Weight (lbs)",
+    "weightFieldKgs": "Weight (kgs)",
+    "dateField": "Date (DD-MM-YYYY)",
+    "timeField": "Time",
+    "addButton": "Add",
+    "saveButton": "Save"
+  },
+  "settings": {
+    "title": "Settings",
+    "weight": "Weight",
+    "weightLbs": "lbs",
+    "selectWeight": "Units",
+    "reminder": "Reminder",
+    "theme": "Theme",
+    "dark": "dark",
+    "light": "light",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contactUs": "Contact Us",
+    "done": "Done"
+  }
+}
